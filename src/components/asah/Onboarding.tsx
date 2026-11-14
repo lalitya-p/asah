@@ -131,7 +131,7 @@ export function Onboarding() {
             <Sparkles />
             <div>
               <span className="eyebrow">{t('DIPERSONALISASI BERDASARKAN USIA')}</span>
-              <h1>{t(`${draft.name} punya tempat dalam perjalanan ini.`)}</h1>
+              <h1>{draft.name}{t(' punya tempat dalam perjalanan ini.')}</h1>
               <p>
                 {t(
                   'Kami akan menggunakan tahap ini untuk menyarankan permainan. Kamu dapat melihat semua tahap, dan saran akan berubah seiring anak bertumbuh.',
