@@ -7,6 +7,15 @@
 import cilukba1 from "@/assets/asah/cilukba-1.svg.asset.json";
 import cilukba2 from "@/assets/asah/cilukba-2.svg.asset.json";
 import cilukba3 from "@/assets/asah/cilukba-3.svg.asset.json";
+import reach1 from "@/assets/asah/reach-1.svg.asset.json";
+import reach2 from "@/assets/asah/reach-2.svg.asset.json";
+import reach3 from "@/assets/asah/reach-3.svg.asset.json";
+import shaker1 from "@/assets/asah/shaker-1.svg.asset.json";
+import shaker2 from "@/assets/asah/shaker-2.svg.asset.json";
+import shaker3 from "@/assets/asah/shaker-3.svg.asset.json";
+import sounds1 from "@/assets/asah/sounds-1.svg.asset.json";
+import sounds2 from "@/assets/asah/sounds-2.svg.asset.json";
+import sounds3 from "@/assets/asah/sounds-3.svg.asset.json";
 
 export type Lang = "id" | "en";
 export type Text = Record<Lang, string>;
@@ -88,16 +97,19 @@ export const ACTIVITIES: Activity[] = [
       {
         title: { id: "Tutup rapat", en: "Seal the lid tight" },
         text: { id: "Isi botol plastik kecil dengan sedikit beras. Tutup rapat dan lilit dengan selotip.", en: "Put a little rice in a small plastic bottle. Close it tightly and tape the lid." },
+        image: shaker1.url,
         alt: { id: "Botol berisi beras dengan tutup diselotip", en: "Bottle with rice and a taped lid" },
       },
       {
         title: { id: "Goyangkan di dekatnya", en: "Shake near your baby" },
         text: { id: "Goyangkan pelan di samping si kecil. Lihat apakah ia menoleh ke arah suara.", en: "Shake it gently to one side. See if your little one turns toward the sound." },
+        image: shaker2.url,
         alt: { id: "Tangan menggoyang botol", en: "A hand shaking the bottle" },
       },
       {
         title: { id: "Biarkan ia menggoyang", en: "Let your baby shake" },
         text: { id: "Berikan botolnya dan biarkan si kecil mencoba sendiri.", en: "Hand over the bottle and let your little one try." },
+        image: shaker3.url,
         alt: { id: "Bayi menggoyang botol", en: "Baby shaking the bottle" },
       },
     ],
@@ -122,16 +134,19 @@ export const ACTIVITIES: Activity[] = [
       {
         title: { id: "Tengkurap di alas", en: "Tummy on a mat" },
         text: { id: "Letakkan si kecil tengkurap di alas yang lembut dan rata.", en: "Lay your little one on their tummy on a soft, flat mat." },
+        image: reach1.url,
         alt: { id: "Bayi tengkurap di alas", en: "Baby on tummy on a mat" },
       },
       {
         title: { id: "Bola sedikit di luar jangkauan", en: "Ball just out of reach" },
         text: { id: "Taruh bola atau mainan favorit sedikit di depan tangannya.", en: "Place a ball or favourite toy just beyond their hands." },
+        image: reach2.url,
         alt: { id: "Bola di depan bayi", en: "A ball in front of the baby" },
       },
       {
         title: { id: "Sorak setiap usaha", en: "Cheer every try" },
         text: { id: "Semangati setiap gerakan. Berhenti kalau si kecil terlihat lelah.", en: "Cheer every movement. Stop if your little one seems tired." },
+        image: reach3.url,
         alt: { id: "Bayi meraih bola", en: "Baby reaching toward the ball" },
       },
     ],
@@ -152,16 +167,19 @@ export const ACTIVITIES: Activity[] = [
       {
         title: { id: "Saling berhadapan", en: "Face to face" },
         text: { id: "Dekatkan wajahmu dan tatap matanya.", en: "Bring your face close and make eye contact." },
+        image: sounds1.url,
         alt: { id: "Orang tua dan bayi berhadapan", en: "Parent and baby face to face" },
       },
       {
         title: { id: "Tunggu suaranya", en: "Wait for a sound" },
         text: { id: "Diam sejenak dan tunggu si kecil bersuara.", en: "Pause and wait for your little one to make a sound." },
+        image: sounds2.url,
         alt: { id: "Bayi bersuara ba-ba", en: "Baby says ba-ba" },
       },
       {
         title: { id: "Tirukan kembali", en: "Copy it back" },
         text: { id: "Ulangi suaranya dengan senyum, lalu tunggu balasannya.", en: "Repeat the sound with a smile, then wait for a reply." },
+        image: sounds3.url,
         alt: { id: "Orang tua menirukan ba-ba", en: "Parent copies ba-ba" },
       },
     ],
