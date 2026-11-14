@@ -22,7 +22,7 @@ export const AGE_GROUPS = [
 ] as const;
 
 export function ageGroupFor(months: number) {
-  return AGE_GROUPS.find(([from, to]) => months >= from && months < to) ?? AGE_GROUPS[AGE_GROUPS.length - 1];
+  return AGE_GROUPS.find(([from, to]) => months >= from && months < to) ?? AGE_GROUPS[9];
 }
 
 export interface Activity {
