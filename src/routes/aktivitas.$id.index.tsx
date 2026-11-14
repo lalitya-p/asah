@@ -31,7 +31,7 @@ function ActivityPage() {
       <section className="dev-materials"><h2>{lang === 'en' ? 'What you need' : 'Yang dibutuhkan'}</h2>{a.materialFree ? <p>{lang === 'en' ? 'No household items needed.' : 'Tanpa barang dari rumah.'}</p> : <ul>{a.requiredMaterials.map(requirement => <li key={requirement.itemId}>{requirementLabel(requirement, lang)}</li>)}</ul>}{a.optionalMaterials.length > 0 && <p>{lang === 'en' ? 'Optional: ' : 'Opsional: '}{a.optionalMaterials.map(requirement => requirementLabel(requirement, lang)).join(', ')}</p>}{eligibility && !eligibility.eligible && <div className="inventory-notice"><strong>{lang === 'en' ? 'Missing materials' : 'Bahan belum lengkap'}</strong><p>{eligibility.missing.length ? missingMaterialLabels(eligibility.missing, lang).join(', ') : (lang === 'en' ? 'Finish household inventory setup to check this activity.' : 'Selesaikan pengaturan barang untuk memeriksa aktivitas ini.')}</p><Link to="/pengaturan">{lang === 'en' ? 'Update household items' : 'Perbarui barang di rumah'}</Link></div>}</section>
       <section aria-label={copy.how[lang]} className="dev-steps"><h2>{copy.how[lang]}</h2>
         {a.steps.map((s, i) => <div key={i} className="dev-step" style={{ background: a.theme.bg }}>
-          {s.image ? <img src={s.image} alt={s.alt[lang]} /> : <div className="dev-step-num" style={{ color: a.theme.accent }} aria-hidden>{i + 1}</div>}
+          {s.image ? <img src={s.image} alt={s.alt?.[lang] ?? ''} /> : <div className="dev-step-num" style={{ color: a.theme.accent }} aria-hidden>{i + 1}</div>}
           <div><b>{i + 1}. {s.title[lang]}</b><p>{s.text[lang]}</p></div>
         </div>)}
       </section>

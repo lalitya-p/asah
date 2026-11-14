@@ -38,14 +38,14 @@ const entry = (id: string, quantity = 1, equivalentId?: string): InventoryEntry 
   });
 
   it('does not let optional items block a material-free Development activity', () => {
-    expect(activitiesForAge(7, inventory('skipped')).map(activity => activity.id)).toEqual(['ciluk-ba', 'tiru-suara']);
+    expect(activitiesForAge(7, inventory('skipped')).map(activity => activity.id)).toEqual(['ciluk-ba', 'tiru-suara', 'jelajah-tekstur', 'cari-suara']);
   });
 
   it('unlocks Development activities only when all required items are present', () => {
     const partial = inventory('complete', [entry('empty-bottle'), entry('rice')]);
-    expect(activitiesForAge(7, partial).map(activity => activity.id)).toEqual(['ciluk-ba', 'tiru-suara']);
+    expect(activitiesForAge(7, partial).map(activity => activity.id)).toEqual(['ciluk-ba', 'tiru-suara', 'jelajah-tekstur', 'cari-suara']);
     const complete = inventory('complete', [entry('empty-bottle'), entry('rice'), entry('tape'), entry('ball-large')]);
-    expect(activitiesForAge(7, complete).map(activity => activity.id)).toEqual(['ciluk-ba', 'botol-bunyi', 'raih-bola', 'tiru-suara']);
+    expect(activitiesForAge(7, complete).map(activity => activity.id)).toEqual(['ciluk-ba', 'botol-bunyi', 'raih-bola', 'tiru-suara', 'jelajah-tekstur', 'cari-suara']);
   });
 
   it('initializes existing families with not-set inventory without touching their records', () => {

@@ -45,10 +45,12 @@ export interface Activity extends MaterialMetadata {
   ageGroup: readonly [number, number];
   minutes: number;
   title: Text;
+  category: Text;
   description: Text;
+  benefit: Text;
   areas: AreaId[];
   theme: { bg: string; accent: string };
-  steps: { title: Text; text: Text; image?: string; alt: Text }[];
+  steps: { title: Text; text: Text; image?: string; alt?: Text }[];
   why: Text;
   safety?: Text;
 }
@@ -59,7 +61,9 @@ export const ACTIVITIES: Activity[] = [
     ageGroup: [6, 9],
     minutes: 5,
     title: { id: "Ciluk ba", en: "Ciluk ba" },
+    category: { id: "Bermain sosial", en: "Social play" },
     description: { id: "Permainan petak umpet dengan wajahmu.", en: "A hide-and-seek game with your face." },
+    benefit: { id: "Memberi kesempatan berlatih memperhatikan, menunggu giliran, dan merespons bersama.", en: "Offers practice watching, waiting for a turn, and responding together." },
     areas: ["others", "talking"],
     materialFree: true,
     requiredMaterials: [],
@@ -95,7 +99,9 @@ export const ACTIVITIES: Activity[] = [
     ageGroup: [6, 9],
     minutes: 5,
     title: { id: "Botol bunyi", en: "Rice shaker bottle" },
+    category: { id: "Sensorik & motorik", en: "Sensory & motor" },
     description: { id: "Mainan kerincing buatan sendiri untuk digenggam dan digoyang.", en: "A homemade rattle to grip and shake." },
+    benefit: { id: "Menggenggam dan menggoyang memberi latihan koordinasi tangan serta sebab dan akibat.", en: "Gripping and shaking offer practice for hand coordination and cause and effect." },
     areas: ["hands"],
     materialFree: false,
     requiredMaterials: [
@@ -139,7 +145,9 @@ export const ACTIVITIES: Activity[] = [
     ageGroup: [6, 9],
     minutes: 5,
     title: { id: "Raih bolanya", en: "Reach for the ball" },
+    category: { id: "Gerak tubuh", en: "Body movement" },
     description: { id: "Waktu tengkurap dengan sesuatu yang seru untuk diraih.", en: "Tummy time with something fun to reach for." },
+    benefit: { id: "Tengkurap dan meraih memberi kesempatan melatih kekuatan serta koordinasi tubuh.", en: "Tummy time and reaching offer opportunities to practice strength and body coordination." },
     areas: ["moving"],
     materialFree: false,
     requiredMaterials: [{ itemId: "ball-large", quantity: 1, substituteItemIds: [] }],
@@ -175,7 +183,9 @@ export const ACTIVITIES: Activity[] = [
     ageGroup: [6, 9],
     minutes: 5,
     title: { id: "Tiru suaranya", en: "Copy your baby's sounds" },
+    category: { id: "Bahasa & sosial", en: "Language & social" },
     description: { id: "Ngobrol bolak-balik yang sederhana dengan si kecil.", en: "A simple back-and-forth chat with your baby." },
+    benefit: { id: "Meniru dan menunggu menciptakan kesempatan berlatih komunikasi bergiliran.", en: "Copying and waiting create opportunities to practice back-and-forth communication." },
     areas: ["talking", "others"],
     materialFree: true,
     requiredMaterials: [],
@@ -204,6 +214,74 @@ export const ACTIVITIES: Activity[] = [
     why: {
       id: "Si kecil belajar bahwa bicara itu bergantian.",
       en: "Your little one learns that talking is a back-and-forth.",
+    },
+  },
+  {
+    id: "jelajah-tekstur",
+    ageGroup: [6, 9],
+    minutes: 5,
+    title: { id: "Jelajah tekstur", en: "Texture explorer" },
+    category: { id: "Bermain sensorik", en: "Sensory play" },
+    description: { id: "Sentuh dan rasakan kain bersih bersama.", en: "Touch and explore clean fabrics together." },
+    benefit: { id: "Sentuhan dan kata-kata deskriptif memberi latihan mengeksplorasi tekstur dan bahasa.", en: "Touch and descriptive words offer practice exploring textures and language." },
+    areas: ["hands", "talking"],
+    materialFree: true,
+    requiredMaterials: [],
+    optionalMaterials: [{ itemId: "cloth-large", quantity: 1, substituteItemIds: ["towel-blanket"] }],
+    theme: { bg: "#F8EDE7", accent: "#81503D" },
+    steps: [
+      {
+        title: { id: "Pilih yang nyaman", en: "Choose something comfortable" },
+        text: { id: "Duduk bersama si kecil. Tawarkan tanganmu atau sehelai kain besar yang bersih dan lembut.", en: "Sit with your little one. Offer your hand or a large, clean, soft cloth." },
+      },
+      {
+        title: { id: "Rasakan perlahan", en: "Explore slowly" },
+        text: { id: "Biarkan si kecil menyentuh dengan tangannya. Ikuti minatnya dan jangan menutup wajahnya.", en: "Let your little one touch with their hands. Follow their interest and keep the cloth away from their face." },
+      },
+      {
+        title: { id: "Beri nama sensasinya", en: "Name the sensation" },
+        text: { id: "Katakan dengan tenang, misalnya “lembut” atau “halus”, lalu beri jeda untuk responsnya.", en: "Calmly say words like “soft” or “smooth”, then pause for their response." },
+      },
+    ],
+    why: {
+      id: "Si kecil mendapat kesempatan mengeksplorasi tekstur melalui sentuhan sambil mendengar kata-kata baru.",
+      en: "Your little one gets to explore textures through touch while hearing new words.",
+    },
+    safety: {
+      id: "Selalu dampingi. Gunakan kain besar yang bersih dan jangan menutup wajah atau membungkus tubuh anak.",
+      en: "Stay close throughout. Use a large, clean cloth and never cover your child's face or wrap it around their body.",
+    },
+  },
+  {
+    id: "cari-suara",
+    ageGroup: [6, 9],
+    minutes: 5,
+    title: { id: "Cari suara", en: "Find the sound" },
+    category: { id: "Suara & perhatian", en: "Sound & attention" },
+    description: { id: "Ajak si kecil mendengar dan mencari suara lembut di sekitarnya.", en: "Invite your little one to listen for gentle sounds nearby." },
+    benefit: { id: "Mendengar, jeda, dan menoleh memberi latihan perhatian serta koordinasi gerak.", en: "Listening, pausing, and turning offer practice for attention and movement coordination." },
+    areas: ["talking", "moving"],
+    materialFree: true,
+    requiredMaterials: [],
+    optionalMaterials: [],
+    theme: { bg: "#E8F0EA", accent: "#38624A" },
+    steps: [
+      {
+        title: { id: "Mulai dengan suara lembut", en: "Start with a gentle sound" },
+        text: { id: "Saat si kecil nyaman, ucapkan namanya atau bersenandung pelan dari samping.", en: "When your little one is comfortable, say their name or hum softly from one side." },
+      },
+      {
+        title: { id: "Beri waktu untuk merespons", en: "Give time to respond" },
+        text: { id: "Berhenti sejenak dan biarkan si kecil menoleh atau menggerakkan tubuh dengan caranya.", en: "Pause and let your little one turn or move their body in their own way." },
+      },
+      {
+        title: { id: "Sambut setiap respons", en: "Welcome every response" },
+        text: { id: "Tersenyum dan lanjutkan bila ia tertarik. Akhiri bila ia memalingkan diri atau tampak lelah.", en: "Smile and continue if they are interested. Stop if they turn away or seem tired." },
+      },
+    ],
+    why: {
+      id: "Si kecil mendapat kesempatan memperhatikan suara dan meresponsnya melalui gerakan atau ekspresi.",
+      en: "Your little one gets to notice sounds and respond through movement or expression.",
     },
   },
 ];
