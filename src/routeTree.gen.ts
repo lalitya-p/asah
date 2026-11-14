@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DukunganRouteImport } from './routes/dukungan'
+import { Route as PengaturanRouteImport } from './routes/pengaturan'
+import { Route as PerkembanganRouteImport } from './routes/perkembangan'
+import { Route as RiwayatRouteImport } from './routes/riwayat'
+import { Route as TersimpanRouteImport } from './routes/tersimpan'
+import { Route as TransparansiRouteImport } from './routes/transparansi'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DukunganRoute = DukunganRouteImport.update({
+  id: '/dukungan',
+  path: '/dukungan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PengaturanRoute = PengaturanRouteImport.update({
+  id: '/pengaturan',
+  path: '/pengaturan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerkembanganRoute = PerkembanganRouteImport.update({
+  id: '/perkembangan',
+  path: '/perkembangan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RiwayatRoute = RiwayatRouteImport.update({
+  id: '/riwayat',
+  path: '/riwayat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TersimpanRoute = TersimpanRouteImport.update({
+  id: '/tersimpan',
+  path: '/tersimpan',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransparansiRoute = TransparansiRouteImport.update({
+  id: '/transparansi',
+  path: '/transparansi',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dukungan': typeof DukunganRoute
+  '/pengaturan': typeof PengaturanRoute
+  '/perkembangan': typeof PerkembanganRoute
+  '/riwayat': typeof RiwayatRoute
+  '/tersimpan': typeof TersimpanRoute
+  '/transparansi': typeof TransparansiRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dukungan': typeof DukunganRoute
+  '/pengaturan': typeof PengaturanRoute
+  '/perkembangan': typeof PerkembanganRoute
+  '/riwayat': typeof RiwayatRoute
+  '/tersimpan': typeof TersimpanRoute
+  '/transparansi': typeof TransparansiRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dukungan': typeof DukunganRoute
+  '/pengaturan': typeof PengaturanRoute
+  '/perkembangan': typeof PerkembanganRoute
+  '/riwayat': typeof RiwayatRoute
+  '/tersimpan': typeof TersimpanRoute
+  '/transparansi': typeof TransparansiRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/dukungan'
+    | '/pengaturan'
+    | '/perkembangan'
+    | '/riwayat'
+    | '/tersimpan'
+    | '/transparansi'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/dukungan'
+    | '/pengaturan'
+    | '/perkembangan'
+    | '/riwayat'
+    | '/tersimpan'
+    | '/transparansi'
+  id:
+    | '__root__'
+    | '/'
+    | '/dukungan'
+    | '/pengaturan'
+    | '/perkembangan'
+    | '/riwayat'
+    | '/tersimpan'
+    | '/transparansi'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DukunganRoute: typeof DukunganRoute
+  PengaturanRoute: typeof PengaturanRoute
+  PerkembanganRoute: typeof PerkembanganRoute
+  RiwayatRoute: typeof RiwayatRoute
+  TersimpanRoute: typeof TersimpanRoute
+  TransparansiRoute: typeof TransparansiRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dukungan': {
+      id: '/dukungan'
+      path: '/dukungan'
+      fullPath: '/dukungan'
+      preLoaderRoute: typeof DukunganRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pengaturan': {
+      id: '/pengaturan'
+      path: '/pengaturan'
+      fullPath: '/pengaturan'
+      preLoaderRoute: typeof PengaturanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/perkembangan': {
+      id: '/perkembangan'
+      path: '/perkembangan'
+      fullPath: '/perkembangan'
+      preLoaderRoute: typeof PerkembanganRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/riwayat': {
+      id: '/riwayat'
+      path: '/riwayat'
+      fullPath: '/riwayat'
+      preLoaderRoute: typeof RiwayatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tersimpan': {
+      id: '/tersimpan'
+      path: '/tersimpan'
+      fullPath: '/tersimpan'
+      preLoaderRoute: typeof TersimpanRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transparansi': {
+      id: '/transparansi'
+      path: '/transparansi'
+      fullPath: '/transparansi'
+      preLoaderRoute: typeof TransparansiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DukunganRoute: DukunganRoute,
+  PengaturanRoute: PengaturanRoute,
+  PerkembanganRoute: PerkembanganRoute,
+  RiwayatRoute: RiwayatRoute,
+  TersimpanRoute: TersimpanRoute,
+  TransparansiRoute: TransparansiRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

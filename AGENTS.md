@@ -28,3 +28,9 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Prototype architecture
+- Keep prototype state in a shared browser-storage provider, read after hydration; approved device-only data must stay separate from production services.
+- Keep age classification, daily quotas, and completion edits in pure domain functions with concrete rule tests so dates and per-child limits remain consistent.
+- Use a static sample activity catalog and explicitly selected concern scenarios; caregiver observations must never infer clinical status.
+- Use leaf TanStack routes inside the root shared shell; each page owns its metadata and the service worker caches the web shell for offline reading.
