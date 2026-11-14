@@ -7,8 +7,10 @@ import {
   finishOnboarding,
   hasOnboardingEvidence,
   migrateLegacy,
+  migrateOnboarding,
   newOnboarding,
   patchOnboarding,
+  roleForOnboarding,
   reconcileSummary,
   type Account,
 } from '@/lib/account';
@@ -124,7 +126,7 @@ describe('Destination rule', () => {
     expect(
       destinationFor({
         ready: true,
-        account: account(space(), { status: 'complete', step: 6, draftChild: null, draftItems: [] }),
+        account: account(space(), { status: 'complete', step: 5, draftChild: null, draftItems: [], flowVersion: 2 }),
       }),
     ).toBe('app');
   });
@@ -135,7 +137,7 @@ describe('Destination rule', () => {
         ready: true,
         account: account(
           space({ children: [], selected: '' }),
-          { status: 'complete', step: 6, draftChild: null, draftItems: [] },
+          { status: 'complete', step: 5, draftChild: null, draftItems: [], flowVersion: 2 },
         ),
       }),
     ).toBe('setup-child');
@@ -168,9 +170,10 @@ describe('Adding another child', () => {
   it('keeps onboarding complete and reuses the account role and inventory', () => {
     const base = account(space({ inventory: { status: 'complete', items: [{ id: 'rice', quantity: 1 }] } }), {
       status: 'complete',
-      step: 6,
+      step: 5,
       draftChild: null,
       draftItems: [],
+      flowVersion: 2,
     });
     const withTwo = addChild(base, kini);
     expect(withTwo.data.children.map(child => child.id)).toEqual(['child-nara', 'child-kini']);
@@ -181,14 +184,69 @@ describe('Adding another child', () => {
   });
 });
 
+describe('Onboarding flow migration', () => {
+  const draftItems = [{ id: 'rice', quantity: 1 }];
+  function legacyAccount(step: number, role = 'Ibu'): Account {
+    return account(space({ children: [], selected: '', role }), {
+      status: 'in-progress',
+      step,
+      draftChild: nara,
+      draftItems,
+      flowVersion: 1,
+    });
+  }
+
+  it.each([
+    [1, 1],
+    [2, 1],
+    [3, 2],
+    [4, 3],
+    [5, 4],
+  ])('maps old step %i to new step %i without losing drafts or role', (oldStep, newStep) => {
+    const migrated = migrateOnboarding(legacyAccount(oldStep, 'Ayah'));
+    expect(migrated.onboarding.step).toBe(newStep);
+    expect(migrated.onboarding.flowVersion).toBe(2);
+    expect(migrated.onboarding.draftChild).toEqual(nara);
+    expect(migrated.onboarding.draftItems).toEqual(draftItems);
+    expect(migrated.data.role).toBe('Ayah');
+  });
+
+  it.each([3, 4, 5])('asks for a missing role once from old step %i without erasing drafts', oldStep => {
+    const migrated = migrateOnboarding(legacyAccount(oldStep, ''));
+    expect(migrated.onboarding.step).toBe(1);
+    expect(migrated.onboarding.draftChild).toEqual(nara);
+    expect(migrated.onboarding.draftItems).toEqual(draftItems);
+  });
+
+  it('keeps completed spaces complete and leaves family records untouched', () => {
+    const original = legacyAccount(6);
+    original.data = space();
+    original.onboarding.status = 'complete';
+    const migrated = migrateOnboarding(original);
+    expect(migrated.onboarding).toEqual({
+      status: 'complete',
+      step: 5,
+      draftChild: nara,
+      draftItems,
+      flowVersion: 2,
+    });
+    expect(migrated.data).toEqual(original.data);
+  });
+
+  it('uses Ibu when the displayed default was never changed and keeps an explicit role', () => {
+    expect(roleForOnboarding('')).toBe('Ibu');
+    expect(roleForOnboarding('Ayah')).toBe('Ayah');
+  });
+});
+
 describe('Interrupted onboarding', () => {
   it('keeps the step and the half-typed child for a later resume', () => {
     const saved = patchOnboarding(account(space({ children: [], selected: '' })), { step: 3, draftChild: nara, draftItems: [{ id: 'rice', quantity: 1 }] });
-    expect(saved.onboarding).toEqual({ status: 'in-progress', step: 3, draftChild: nara, draftItems: [{ id: 'rice', quantity: 1 }] });
+    expect(saved.onboarding).toEqual({ status: 'in-progress', step: 3, draftChild: nara, draftItems: [{ id: 'rice', quantity: 1 }], flowVersion: 2 });
   });
 
-  it('clamps the saved step inside the six-step flow', () => {
-    expect(patchOnboarding(account(space()), { step: 9 }).onboarding.step).toBe(6);
+  it('clamps the saved step inside the five-stage flow', () => {
+    expect(patchOnboarding(account(space()), { step: 9 }).onboarding.step).toBe(5);
     expect(patchOnboarding(account(space()), { step: 0 }).onboarding.step).toBe(1);
   });
 });

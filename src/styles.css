@@ -485,6 +485,10 @@ button,a,select,input { -webkit-tap-highlight-color: transparent; }
 .journey-stage-body>p{font-size:13px;line-height:1.65;color:var(--muted-foreground);margin-top:12px;}
 .journey-theory-toggle{display:inline-flex;align-items:center;gap:5px;min-height:40px;padding:0;color:var(--primary);background:none;border:0;font-size:12px;font-weight:600;}
 .journey-stage-body>.journey-theory{padding:12px;border-radius:12px;background:var(--card);}
+.journey-theory-inline{display:flex;flex-direction:column;gap:5px;margin-top:12px;font-size:12px;line-height:1.6;color:var(--muted-foreground);}
+.journey-theory-inline>b{color:var(--primary);font-size:11px;letter-spacing:.04em;text-transform:uppercase;}
+.journey-theory-inline>span{font-weight:600;color:var(--foreground);}
+.journey-theory-inline>p{font-size:12px;line-height:1.6;}
 .inventory-editor{display:flex;flex-direction:column;gap:16px;margin-top:16px;}
 .inventory-search{display:flex;align-items:center;gap:10px;padding:0 14px;border:1px solid var(--input);border-radius:14px;background:var(--card);color:var(--muted-foreground);}
 .inventory-search input{width:100%;min-height:46px;border:0;outline:0;background:transparent;color:var(--foreground);}

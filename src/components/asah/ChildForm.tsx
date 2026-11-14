@@ -7,18 +7,19 @@ import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
 import { ageMonths, caregiverRoles, stageFor, type Child } from '@/lib/asah';
 
-export function ChildForm({ initial, onDone, onProfile, submitLabel }: {
+export function ChildForm({ initial, onDone, onProfile, submitLabel, allowRoleQuestion = true }: {
   initial?: Child | undefined;
   onDone: () => void;
   onProfile?: (child: Child, role: string) => void;
   submitLabel?: string;
+  allowRoleQuestion?: boolean;
 }) {
   const { t } = useLanguage();
   const { state, update, now } = useAsah();
   const [name, setName] = useState(initial?.name ?? '');
   const [dob, setDob] = useState(initial?.dob ?? '');
   const [role, setRole] = useState('Ibu');
-  const askRole = !state.role;
+  const askRole = allowRoleQuestion && !state.role;
   const [error, setError] = useState('');
   const [consent, setConsent] = useState(Boolean(initial));
 

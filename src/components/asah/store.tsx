@@ -12,6 +12,9 @@ import {
   isRoot,
   looksLikeAppState,
   migrateLegacy,
+  migrateOnboarding,
+  newOnboarding,
+  patchOnboarding as patchAccountOnboarding,
   emptyRoot,
   type Account,
   type Destination,
@@ -60,7 +63,7 @@ export function AsahProvider({ children }: { children: ReactNode }) {
       let next: RootState | null = null;
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (isRoot(parsed)) next = parsed;
+        if (isRoot(parsed)) next = { ...parsed, accounts: parsed.accounts.map(migrateOnboarding) };
         else toast.error(t('Data tidak dapat dibaca. Mulai dengan profil baru.'));
       }
       // Data saved before family spaces existed always wins over an empty space
@@ -120,7 +123,7 @@ export function AsahProvider({ children }: { children: ReactNode }) {
     child: account ? account.data.children.find(item => item.id === account.data.selected) : undefined,
     account,
     accounts: root.accounts,
-    onboarding: account?.onboarding ?? { status: 'in-progress', step: 1, draftChild: null, draftItems: [] },
+    onboarding: account?.onboarding ?? newOnboarding(),
     destination: destinationFor({ ready, account }),
     createSpace: name => {
       const created = createAccount(name, crypto.randomUUID(), new Date().toISOString());
@@ -130,15 +133,7 @@ export function AsahProvider({ children }: { children: ReactNode }) {
       setRoot(current => (current.accounts.some(item => item.id === id) ? { ...current, activeId: id } : current)),
     signOut: () => setRoot(current => ({ ...current, activeId: null })),
     renameSpace: name => writeAccount(item => ({ ...item, name: name.trim() || item.name })),
-    patchOnboarding: patch =>
-      writeAccount(item => ({
-        ...item,
-        onboarding: {
-          ...item.onboarding,
-          ...patch,
-          step: Math.min(6, Math.max(1, Math.round(patch.step ?? item.onboarding.step))),
-        },
-      })),
+    patchOnboarding: patch => writeAccount(item => patchAccountOnboarding(item, patch)),
     saveRole: role => writeAccount(item => ({ ...item, data: { ...item.data, role } })),
     finish: (child, items, skipped) => writeAccount(item => finishOnboarding(item, child, items, skipped)),
     confirmData: () => writeAccount(confirmReconcile),

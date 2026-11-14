@@ -6,7 +6,7 @@ export const Route = createFileRoute('/onboarding')({
   head: () =>
     pageHead(
       'Perkenalan',
-      'Enam langkah singkat: kenapa bermain berarti, peran Anda, profil anak, tahap usianya, dan barang di rumah.',
+      'Empat langkah singkat: peran Anda, profil anak, perjalanan usia yang dipersonalisasi, dan barang di rumah.',
       true,
     ),
   component: Onboarding,

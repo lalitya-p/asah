@@ -887,5 +887,14 @@
   "Nama panggilan opsional, tanggal lahir, peran pengasuh, catatan bermain, dan aktivitas tersimpan disimpan di browser ini setelah persetujuan, di dalam ruang keluarga Anda. Tidak ada akun, kata sandi, atau sinkronisasi ke layanan penyimpanan data. Keluar hanya menyembunyikannya dari layar; Hapus semua data menghapusnya dari perangkat ini. Sebaiknya gunakan data fiktif.": "Optional nickname, date of birth, caregiver role, play notes, and saved activities are stored in this browser after consent, inside your family space. There is no account, password, or sync to any data storage service. Signing out only hides them from the screen; Delete all data erases them from this device. Please use pretend data.",
   "Data lama tidak dapat dibaca. Mulai dengan profil baru.": "Your older data could not be read. Start with a new profile.",
   "Profil anak: ": "Child profiles: ",
-  "Periksa datamu": "Check your data"
+  "Periksa datamu": "Check your data",
+  "Lima tahun pertama penuh perubahan. Tahap usia ini membantu kami menyarankan permainan sederhana untuk mengeksplorasi, terhubung, dan mencoba hal baru—tanpa menilai perkembangan.": "The first five years are full of change. This age stage helps us suggest simple play for exploring, connecting, and trying new things—without assessing development.",
+  "Bayi belajar melalui indra, gerakan, dan kedekatan dengan Anda.": "Babies learn through senses, movement, and closeness with you.",
+  "Anak mengulangi tindakan dan mulai mengenali sebab dan akibat.": "Children repeat actions and begin to discover cause and effect.",
+  "Anak bertumbuh saat ditemani, diberi contoh, dan dibiarkan mencoba sendiri.": "Children grow when they are supported, shown examples, and given room to try on their own.",
+  "Bermain pura-pura dan latihan mandiri membantu anak mengeksplorasi ide serta keterampilan baru.": "Pretend play and hands-on practice help children explore new ideas and skills.",
+  "Pilihan, cerita, dan bantuan secukupnya memberi anak ruang untuk berinisiatif.": "Choices, stories, and just-enough guidance give children room to take initiative.",
+  "Vygotsky — Zona Perkembangan Proksimal (ZPD); Erikson — Otonomi vs. Rasa Malu": "Vygotsky — Zone of Proximal Development (ZPD); Erikson — Autonomy vs. Shame",
+  "Piaget — Preoperasional; Montessori — Masa sensitif": "Piaget — Preoperational; Montessori — Sensitive periods",
+  "Erikson — Inisiatif vs. Rasa Bersalah; Vygotsky — Dukungan bertahap (scaffolding)": "Erikson — Initiative vs. Guilt; Vygotsky — Scaffolding"
 }

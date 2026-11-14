@@ -7,13 +7,15 @@ import {
   type InventoryEntry,
 } from './asah';
 
-export const ONBOARDING_STEP_COUNT = 6;
+export const ONBOARDING_STEP_COUNT = 5;
+export const ONBOARDING_FLOW_VERSION = 2;
 export type OnboardingStatus = 'in-progress' | 'complete';
 export type OnboardingState = {
   status: OnboardingStatus;
   step: number;
   draftChild: Child | null;
   draftItems: InventoryEntry[];
+  flowVersion: number;
 };
 export type Account = {
   id: string;
@@ -41,12 +43,16 @@ export function freshState(): AppState {
 }
 
 export function newOnboarding(): OnboardingState {
-  return { status: 'in-progress', step: 1, draftChild: null, draftItems: [] };
+  return { status: 'in-progress', step: 1, draftChild: null, draftItems: [], flowVersion: ONBOARDING_FLOW_VERSION };
 }
 
 export function clampStep(step: number): number {
   if (!Number.isFinite(step)) return 1;
   return Math.min(ONBOARDING_STEP_COUNT, Math.max(1, Math.round(step)));
+}
+
+export function roleForOnboarding(role: string): string {
+  return role || 'Ibu';
 }
 
 export function createAccount(name: string, id: string, createdAt: string): Account {
@@ -60,6 +66,46 @@ export function createAccount(name: string, id: string, createdAt: string): Acco
   };
 }
 
+// Version 1 started with a generic introduction and used six numbered stages.
+// Move interrupted people to the equivalent version-2 screen without touching
+// their role, child draft, household draft, or family records.
+export function migrateOnboarding(account: Account): Account {
+  const current = account.onboarding;
+  if (current.flowVersion === ONBOARDING_FLOW_VERSION) return account;
+  const draftChild = current.draftChild ?? null;
+  const draftItems = current.draftItems ?? [];
+  if (current.status === 'complete') {
+    return {
+      ...account,
+      onboarding: {
+        status: 'complete',
+        step: ONBOARDING_STEP_COUNT,
+        draftChild,
+        draftItems,
+        flowVersion: ONBOARDING_FLOW_VERSION,
+      },
+    };
+  }
+  const oldStep = Math.min(6, Math.max(1, Math.round(Number.isFinite(current.step) ? current.step : 1)));
+  let step = 1;
+  if (account.data.role) {
+    if (oldStep === 3) step = 2;
+    else if (oldStep === 4 && draftChild) step = 3;
+    else if (oldStep >= 5 && draftChild) step = 4;
+    else if (oldStep >= 3) step = 2;
+  }
+  return {
+    ...account,
+    onboarding: {
+      status: 'in-progress',
+      step,
+      draftChild,
+      draftItems,
+      flowVersion: ONBOARDING_FLOW_VERSION,
+    },
+  };
+}
+
 // "Has children + consent given" is the only reliable evidence that the
 // developmental introduction was already seen. Anything partial stays incomplete.
 export function hasOnboardingEvidence(data: AppState): boolean {
@@ -68,7 +114,7 @@ export function hasOnboardingEvidence(data: AppState): boolean {
 
 export function onboardingForEvidence(data: AppState): OnboardingState {
   return hasOnboardingEvidence(data)
-    ? { status: 'complete', step: ONBOARDING_STEP_COUNT, draftChild: null, draftItems: [] }
+    ? { status: 'complete', step: ONBOARDING_STEP_COUNT, draftChild: null, draftItems: [], flowVersion: ONBOARDING_FLOW_VERSION }
     : newOnboarding();
 }
 
@@ -115,8 +161,9 @@ export function confirmReconcile(account: Account): Account {
 }
 
 export function patchOnboarding(account: Account, patch: Partial<OnboardingState>): Account {
-  const next = { ...account.onboarding, ...patch };
-  return { ...account, onboarding: { ...next, step: clampStep(next.step) } };
+  const migrated = migrateOnboarding(account);
+  const next = { ...migrated.onboarding, ...patch, flowVersion: ONBOARDING_FLOW_VERSION };
+  return { ...migrated, onboarding: { ...next, step: clampStep(next.step) } };
 }
 
 export function setRole(account: Account, role: string): Account {
@@ -139,6 +186,7 @@ export function finishOnboarding(
       step: ONBOARDING_STEP_COUNT,
       draftChild: child,
       draftItems: items,
+      flowVersion: ONBOARDING_FLOW_VERSION,
     },
     data: {
       ...account.data,
@@ -155,7 +203,12 @@ export function addChild(account: Account, child: Child): Account {
   if (account.data.children.some(item => item.id === child.id)) return account;
   return {
     ...account,
-    onboarding: { ...account.onboarding, status: 'complete', step: ONBOARDING_STEP_COUNT },
+    onboarding: {
+      ...account.onboarding,
+      status: 'complete',
+      step: ONBOARDING_STEP_COUNT,
+      flowVersion: ONBOARDING_FLOW_VERSION,
+    },
     data: {
       ...account.data,
       children: [...account.data.children, child],
@@ -166,7 +219,7 @@ export function addChild(account: Account, child: Child): Account {
 }
 
 // Onboarding stays complete: a space that lost every child needs child setup,
-// not the five educational steps replayed from the beginning.
+// not the educational introduction replayed from the beginning.
 export function destinationFor(input: { ready: boolean; account: Account | null }): Destination {
   if (!input.ready) return 'boot';
   const account = input.account;
