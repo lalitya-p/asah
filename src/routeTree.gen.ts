@@ -10,7 +10,6 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as DukunganRouteImport } from './routes/dukungan'
 import { Route as PengaturanRouteImport } from './routes/pengaturan'
 import { Route as PerkembanganRouteImport } from './routes/perkembangan'
 import { Route as RiwayatRouteImport } from './routes/riwayat'
@@ -22,11 +21,6 @@ import { Route as AktivitasIdCatatRouteImport } from './routes/aktivitas.$id.cat
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DukunganRoute = DukunganRouteImport.update({
-  id: '/dukungan',
-  path: '/dukungan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PengaturanRoute = PengaturanRouteImport.update({
@@ -67,7 +61,6 @@ const AktivitasIdCatatRoute = AktivitasIdCatatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/dukungan': typeof DukunganRoute
   '/pengaturan': typeof PengaturanRoute
   '/perkembangan': typeof PerkembanganRoute
   '/riwayat': typeof RiwayatRoute
@@ -78,7 +71,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/dukungan': typeof DukunganRoute
   '/pengaturan': typeof PengaturanRoute
   '/perkembangan': typeof PerkembanganRoute
   '/riwayat': typeof RiwayatRoute
@@ -90,7 +82,6 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/dukungan': typeof DukunganRoute
   '/pengaturan': typeof PengaturanRoute
   '/perkembangan': typeof PerkembanganRoute
   '/riwayat': typeof RiwayatRoute
@@ -103,7 +94,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/dukungan'
     | '/pengaturan'
     | '/perkembangan'
     | '/riwayat'
@@ -114,7 +104,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/dukungan'
     | '/pengaturan'
     | '/perkembangan'
     | '/riwayat'
@@ -125,7 +114,6 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/dukungan'
     | '/pengaturan'
     | '/perkembangan'
     | '/riwayat'
@@ -137,7 +125,6 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DukunganRoute: typeof DukunganRoute
   PengaturanRoute: typeof PengaturanRoute
   PerkembanganRoute: typeof PerkembanganRoute
   RiwayatRoute: typeof RiwayatRoute
@@ -154,13 +141,6 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dukungan': {
-      id: '/dukungan'
-      path: '/dukungan'
-      fullPath: '/dukungan'
-      preLoaderRoute: typeof DukunganRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pengaturan': {
@@ -217,7 +197,6 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DukunganRoute: DukunganRoute,
   PengaturanRoute: PengaturanRoute,
   PerkembanganRoute: PerkembanganRoute,
   RiwayatRoute: RiwayatRoute,

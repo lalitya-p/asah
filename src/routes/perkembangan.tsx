@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
 import { StartGate } from '@/components/asah/shared';
@@ -17,7 +17,6 @@ const copy = {
   tagline: { id: 'Pahami, jangan bandingkan.', en: "Understand, don't compare." },
   noticed: { id: 'Yang kamu perhatikan', en: "What you've noticed" },
   none: { id: 'Belum ada momen', en: 'No moments yet' },
-  help: { id: 'Ada pertanyaan soal pertumbuhan, berat badan atau imunisasi? Cek Buku KIA, tanya Posyandu atau bidan', en: 'Questions about growth, weight or immunisation? Check your Buku KIA, ask your Posyandu or bidan' },
   over: { id: 'Ide main tersedia untuk anak di bawah 6 tahun.', en: 'Play ideas are available for children under 6.' },
 };
 
@@ -42,6 +41,5 @@ function Development() {
           </div>
         </div>); })}
     </section>
-    <Link to="/dukungan" className="dev-help">{copy.help[lang]} <span aria-hidden>›</span></Link>
   </div></StartGate>;
 }
