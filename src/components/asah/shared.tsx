@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useAsah } from './store';
 import { durationSteps, stages, type Activity } from '@/lib/catalog';
-import { Onboarding } from '@/components/asah/Onboarding';
 export { ChildForm } from '@/components/asah/ChildForm';
 export function PageHeading({ eyebrow, title, children }: {
     eyebrow: string;
@@ -22,17 +21,6 @@ export function Modal({ title, description, open, close, children }: {
     children: ReactNode;
 }) { const { t, locale } = useLanguage(); return <Dialog open={open} onOpenChange={value => { if (!value)
     close(); }}><DialogContent className="asah-dialog"><DialogTitle>{title}</DialogTitle><DialogDescription>{description}</DialogDescription>{children}</DialogContent></Dialog>; }
-export function StartGate({ children }: {
-    children: ReactNode;
-}) {
-    const { t } = useLanguage();
-    const { ready, state } = useAsah();
-    if (!ready)
-        return <div className="py-24 text-center text-muted-foreground">{t("Menyiapkan ruang bermain\u2026")}</div>;
-    if (state.children.length)
-        return <>{children}</>;
-    return <Onboarding />;
-}
 export function Upgrade({ open, close }: {
     open: boolean;
     close: () => void;

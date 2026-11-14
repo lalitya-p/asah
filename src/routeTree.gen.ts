@@ -10,17 +10,26 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as PengaturanRouteImport } from './routes/pengaturan'
 import { Route as PerkembanganRouteImport } from './routes/perkembangan'
+import { Route as ReconcileRouteImport } from './routes/reconcile'
 import { Route as RiwayatRouteImport } from './routes/riwayat'
+import { Route as SetupChildRouteImport } from './routes/setup-child'
 import { Route as TersimpanRouteImport } from './routes/tersimpan'
 import { Route as TransparansiRouteImport } from './routes/transparansi'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as AktivitasIdIndexRouteImport } from './routes/aktivitas.$id.index'
 import { Route as AktivitasIdCatatRouteImport } from './routes/aktivitas.$id.catat'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PengaturanRoute = PengaturanRouteImport.update({
@@ -33,9 +42,19 @@ const PerkembanganRoute = PerkembanganRouteImport.update({
   path: '/perkembangan',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReconcileRoute = ReconcileRouteImport.update({
+  id: '/reconcile',
+  path: '/reconcile',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RiwayatRoute = RiwayatRouteImport.update({
   id: '/riwayat',
   path: '/riwayat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SetupChildRoute = SetupChildRouteImport.update({
+  id: '/setup-child',
+  path: '/setup-child',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TersimpanRoute = TersimpanRouteImport.update({
@@ -46,6 +65,11 @@ const TersimpanRoute = TersimpanRouteImport.update({
 const TransparansiRoute = TransparansiRouteImport.update({
   id: '/transparansi',
   path: '/transparansi',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AktivitasIdIndexRoute = AktivitasIdIndexRouteImport.update({
@@ -61,32 +85,44 @@ const AktivitasIdCatatRoute = AktivitasIdCatatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRoute
   '/pengaturan': typeof PengaturanRoute
   '/perkembangan': typeof PerkembanganRoute
+  '/reconcile': typeof ReconcileRoute
   '/riwayat': typeof RiwayatRoute
+  '/setup-child': typeof SetupChildRoute
   '/tersimpan': typeof TersimpanRoute
   '/transparansi': typeof TransparansiRoute
+  '/welcome': typeof WelcomeRoute
   '/aktivitas/$id/catat': typeof AktivitasIdCatatRoute
   '/aktivitas/$id/': typeof AktivitasIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRoute
   '/pengaturan': typeof PengaturanRoute
   '/perkembangan': typeof PerkembanganRoute
+  '/reconcile': typeof ReconcileRoute
   '/riwayat': typeof RiwayatRoute
+  '/setup-child': typeof SetupChildRoute
   '/tersimpan': typeof TersimpanRoute
   '/transparansi': typeof TransparansiRoute
+  '/welcome': typeof WelcomeRoute
   '/aktivitas/$id/catat': typeof AktivitasIdCatatRoute
   '/aktivitas/$id': typeof AktivitasIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/onboarding': typeof OnboardingRoute
   '/pengaturan': typeof PengaturanRoute
   '/perkembangan': typeof PerkembanganRoute
+  '/reconcile': typeof ReconcileRoute
   '/riwayat': typeof RiwayatRoute
+  '/setup-child': typeof SetupChildRoute
   '/tersimpan': typeof TersimpanRoute
   '/transparansi': typeof TransparansiRoute
+  '/welcome': typeof WelcomeRoute
   '/aktivitas/$id/catat': typeof AktivitasIdCatatRoute
   '/aktivitas/$id/': typeof AktivitasIdIndexRoute
 }
@@ -94,42 +130,58 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/onboarding'
     | '/pengaturan'
     | '/perkembangan'
+    | '/reconcile'
     | '/riwayat'
+    | '/setup-child'
     | '/tersimpan'
     | '/transparansi'
+    | '/welcome'
     | '/aktivitas/$id/catat'
     | '/aktivitas/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/onboarding'
     | '/pengaturan'
     | '/perkembangan'
+    | '/reconcile'
     | '/riwayat'
+    | '/setup-child'
     | '/tersimpan'
     | '/transparansi'
+    | '/welcome'
     | '/aktivitas/$id/catat'
     | '/aktivitas/$id'
   id:
     | '__root__'
     | '/'
+    | '/onboarding'
     | '/pengaturan'
     | '/perkembangan'
+    | '/reconcile'
     | '/riwayat'
+    | '/setup-child'
     | '/tersimpan'
     | '/transparansi'
+    | '/welcome'
     | '/aktivitas/$id/catat'
     | '/aktivitas/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  OnboardingRoute: typeof OnboardingRoute
   PengaturanRoute: typeof PengaturanRoute
   PerkembanganRoute: typeof PerkembanganRoute
+  ReconcileRoute: typeof ReconcileRoute
   RiwayatRoute: typeof RiwayatRoute
+  SetupChildRoute: typeof SetupChildRoute
   TersimpanRoute: typeof TersimpanRoute
   TransparansiRoute: typeof TransparansiRoute
+  WelcomeRoute: typeof WelcomeRoute
   AktivitasIdCatatRoute: typeof AktivitasIdCatatRoute
   AktivitasIdIndexRoute: typeof AktivitasIdIndexRoute
 }
@@ -141,6 +193,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pengaturan': {
@@ -157,11 +216,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PerkembanganRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reconcile': {
+      id: '/reconcile'
+      path: '/reconcile'
+      fullPath: '/reconcile'
+      preLoaderRoute: typeof ReconcileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/riwayat': {
       id: '/riwayat'
       path: '/riwayat'
       fullPath: '/riwayat'
       preLoaderRoute: typeof RiwayatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/setup-child': {
+      id: '/setup-child'
+      path: '/setup-child'
+      fullPath: '/setup-child'
+      preLoaderRoute: typeof SetupChildRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tersimpan': {
@@ -176,6 +249,13 @@ declare module '@tanstack/react-router' {
       path: '/transparansi'
       fullPath: '/transparansi'
       preLoaderRoute: typeof TransparansiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/aktivitas/$id/': {
@@ -197,11 +277,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  OnboardingRoute: OnboardingRoute,
   PengaturanRoute: PengaturanRoute,
   PerkembanganRoute: PerkembanganRoute,
+  ReconcileRoute: ReconcileRoute,
   RiwayatRoute: RiwayatRoute,
+  SetupChildRoute: SetupChildRoute,
   TersimpanRoute: TersimpanRoute,
   TransparansiRoute: TransparansiRoute,
+  WelcomeRoute: WelcomeRoute,
   AktivitasIdCatatRoute: AktivitasIdCatatRoute,
   AktivitasIdIndexRoute: AktivitasIdIndexRoute,
 }

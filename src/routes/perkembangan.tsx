@@ -1,7 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
-import { StartGate } from '@/components/asah/shared';
 import { ActivityCarousel } from '@/components/asah/ActivityCarousel';
 import { DevelopmentJourney } from '@/components/asah/DevelopmentJourney';
 import { AreaIcon } from '@/components/asah/area-icon';
@@ -28,7 +27,7 @@ function Development() {
   const moments = childMoments(state.logs, child?.id);
   const name = child?.name ?? '';
   const inRange = months >= 0 && months < 72;
-  return <StartGate><div className="dev-page">
+  return <div className="dev-page">
     <header className="dev-head"><h1>{name}{inRange && <> · {ageGroupLabel(months, lang)}</>}</h1><p>{copy.tagline[lang]}</p></header>
     <DevelopmentJourney currentStage={stageFor(months)} childName={name} />
     {inRange ? <ActivityCarousel activities={activitiesForAge(months, state.inventory)} lang={lang} /> : <p className="dev-empty">{copy.over[lang]}</p>}
@@ -43,5 +42,5 @@ function Development() {
           </div>
         </div>); })}
     </section>
-  </div></StartGate>;
+  </div>;
 }

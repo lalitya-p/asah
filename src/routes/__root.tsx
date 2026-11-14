@@ -13,7 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AsahProvider } from '@/components/asah/store';
-import { AsahShell } from '@/components/asah/shell';
+import { AsahGate } from '@/components/asah/gate';
 import { Toaster } from '@/components/ui/sonner';
 import { LanguageProvider } from '@/components/asah/language';
 
@@ -129,7 +129,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <LanguageProvider><AsahProvider><AsahShell><Outlet /></AsahShell><Toaster position="top-center" /></AsahProvider></LanguageProvider>
+      <LanguageProvider><AsahProvider><AsahGate><Outlet /></AsahGate><Toaster position="top-center" /></AsahProvider></LanguageProvider>
     </QueryClientProvider>
   );
 }

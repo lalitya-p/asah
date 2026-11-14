@@ -5,14 +5,14 @@ import { ArrowRight, Bookmark, Check, Clock3, Heart, RefreshCw, ShieldCheck, Spa
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { useAsah } from '@/components/asah/store';
-import { ActivityDetail, Modal, PageHeading, ReviewNote, StartGate, Upgrade } from '@/components/asah/shared';
+import { ActivityDetail, Modal, PageHeading, ReviewNote, Upgrade } from '@/components/asah/shared';
 import { addCompletion, ageMonths, currentDay, replaceActivity, setDuration, stageFor, type Response } from '@/lib/asah';
 import { activityEligibility, activityFor, stages } from '@/lib/catalog';
 import { missingMaterialLabels } from '@/lib/inventory';
 import { pageHead } from '@/lib/page-head';
 import playTogether from '@/assets/play-together.jpg';
 export const Route = createFileRoute('/')({ head: () => pageHead('Hari ini', 'Satu aktivitas sederhana sesuai usia anak untuk bermain bersama hari ini.'), component: Index });
-function Index() { const { t, locale } = useLanguage(); return <StartGate><Today /></StartGate>; }
+function Index() { const { t, locale } = useLanguage(); return <Today />; }
 function Today() {
     const { t, locale, language } = useLanguage();
     const { state, update, child, now } = useAsah();

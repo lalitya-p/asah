@@ -2,7 +2,6 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
-import { StartGate } from '@/components/asah/shared';
 import { AREAS, NOTICE_OPTIONS, getActivity } from '@/data/asahActivities';
 import { addCompletion, ageMonths, stageFor } from '@/lib/asah';
 import { pageHead } from '@/lib/page-head';
@@ -36,7 +35,7 @@ function LogMoment() {
     update(s => ({ ...s, logs: addCompletion(s.logs, { id: crypto.randomUUID(), childId: child.id, activityId: a.id, title: a.title.id, focus: a.areas.map(x => AREAS[x].label.id).join(' · '), stage: stageFor(ageMonths(child.dob, now)) ?? 0, duration: a.minutes, at: new Date().toISOString(), noticed: choice, areas: a.areas, ...(note.trim() ? { note: note.trim() } : {}) }) }));
     setSaved(true);
   };
-  return <StartGate><div className="dev-page">
+  return <div className="dev-page">
     <Link to="/aktivitas/$id" params={{ id: a.id }} className="dev-back">← {copy.back[lang]}</Link>
     {!saved ? <>
       <section className="dev-detail-head"><div className="dev-kicker" style={{ color: a.theme.accent }}>{copy.kicker[lang]}</div><h1>{copy.question[lang]} {a.title[lang]} {copy.question2[lang]}</h1><p>{copy.sub[lang]}</p></section>
@@ -51,5 +50,5 @@ function LogMoment() {
       <Link to="/perkembangan" className="dev-primary">{copy.backDev[lang]}</Link>
       <button type="button" className="dev-link" onClick={() => { setChoice(null); setNote(''); setSaved(false); }}>{copy.another[lang]}</button>
     </div>}
-  </div></StartGate>;
+  </div>;
 }

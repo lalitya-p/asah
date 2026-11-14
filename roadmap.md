@@ -7,4 +7,5 @@
 - [x] Add shared household inventory setup, migration and Settings editor
 - [x] Add structured materials and eligibility to both activity catalogs
 - [x] Preserve saved/history records and explain missing materials after inventory changes
+- [x] Add family spaces, one-time data confirmation, resumable six-step onboarding, and sign out
 - [x] Verify replacement limits, languages, phone/desktop and end-to-end flows
