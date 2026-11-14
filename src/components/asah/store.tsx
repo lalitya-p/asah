@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState, type Context as ReactContext, type ReactNode } from 'react';
 import { toast } from 'sonner';
 import { useLanguage } from './language';
-import { emptyState, type AppState, type Child } from '@/lib/asah';
+import { emptyState, migrateState, type AppState, type Child } from '@/lib/asah';
 
 type Store = { state: AppState; update: (fn: (s: AppState) => AppState) => void; ready: boolean; now: Date; online: boolean; child: Child | undefined };
 // Preserve context identity across Vite updates. Existing mounted providers and
@@ -16,7 +16,7 @@ export function AsahProvider({ children }: { children: ReactNode }) {
   const [now, setNow] = useState(new Date('2026-11-14T00:00:00Z'));
   const [online, setOnline] = useState(true);
   useEffect(() => {
-    try { const raw = localStorage.getItem(KEY); if (raw) { const parsed = JSON.parse(raw); if (Array.isArray(parsed.children) && Array.isArray(parsed.logs) && Array.isArray(parsed.saved) && parsed.days && typeof parsed.selected === 'string') setState(parsed); else toast.error(t('Data tidak dapat dibaca. Mulai dengan profil baru.')); } } catch { toast.error(t('Data tidak dapat dibaca. Penyimpanan mungkin tidak tersedia.')); }
+    try { const raw = localStorage.getItem(KEY); if (raw) { const parsed = JSON.parse(raw); if (Array.isArray(parsed.children) && Array.isArray(parsed.logs) && Array.isArray(parsed.saved) && parsed.days && typeof parsed.selected === 'string') setState(migrateState(parsed)); else toast.error(t('Data tidak dapat dibaca. Mulai dengan profil baru.')); } } catch { toast.error(t('Data tidak dapat dibaca. Penyimpanan mungkin tidak tersedia.')); }
     setReady(true); setNow(new Date()); setOnline(navigator.onLine);
     const tick = setInterval(() => setNow(new Date()), 1000);
     const status = () => setOnline(navigator.onLine);

@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { useAsah } from './store';
-import { ageMonths, sampleChild, stageFor, type Child } from '@/lib/asah';
+import { ageMonths, caregiverRoles, sampleChild, stageFor, type Child } from '@/lib/asah';
 import { durationSteps, stages, type Activity } from '@/lib/catalog';
 export function PageHeading({ eyebrow, title, children }: {
     eyebrow: string;
@@ -27,10 +27,11 @@ export function ChildForm({ initial, onDone }: {
     onDone: () => void;
 }) {
     const { t, locale } = useLanguage();
-    const { update, now } = useAsah();
+    const { state, update, now } = useAsah();
     const [name, setName] = useState(initial?.name ?? '');
     const [dob, setDob] = useState(initial?.dob ?? '');
-    const [role, setRole] = useState(initial?.role ?? 'Ibu');
+    const [role, setRole] = useState('Ibu');
+    const askRole = !state.role;
     const [error, setError] = useState('');
     const [consent, setConsent] = useState(Boolean(initial));
     return <form className="space-y-5" onSubmit={e => { e.preventDefault(); const months = ageMonths(dob, now); if (months < 0) {
@@ -39,11 +40,11 @@ export function ChildForm({ initial, onDone }: {
     } if (!consent) {
         setError(t('Persetujuan diperlukan untuk menyimpan profil di perangkat.'));
         return;
-    } const child = { id: initial?.id ?? crypto.randomUUID(), name: name.trim() || 'Si kecil', dob, role }; update(s => ({ ...s, consent: true, children: initial ? s.children.map(c => c.id === initial.id ? child : c) : [...s.children, child], selected: child.id })); if (stageFor(months) === null)
+    } const child = { id: initial?.id ?? crypto.randomUUID(), name: name.trim() || 'Si kecil', dob }; update(s => ({ ...s, consent: true, role: s.role || role, children: initial ? s.children.map(c => c.id === initial.id ? child : c) : [...s.children, child], selected: child.id })); if (stageFor(months) === null)
         toast.info(t('Aktivitas Asah tersedia untuk anak di bawah 6 tahun.')); onDone(); }}>
     <label className="field-label">{t("Nama panggilan ")}<span className="text-muted-foreground">{t("(opsional)")}</span><input className="field" value={name} maxLength={40} onChange={e => setName(e.target.value)} placeholder={t("Nama si kecil")}/></label>
     <label className="field-label">{t("Tanggal lahir")}<input className="field" type="date" required value={dob} onChange={e => setDob(e.target.value)}/></label>
-    <label className="field-label">{t("Saya adalah")}<select className="field" value={role} onChange={e => setRole(e.target.value)}>{['Ibu', 'Ayah', 'Kakek / Nenek', 'Pengasuh'].map(r => <option key={r} value={r}>{t(r)}</option>)}</select></label>
+    {askRole && <label className="field-label">{t("Saya adalah")}<select className="field" value={role} onChange={e => setRole(e.target.value)}>{caregiverRoles.map(r => <option key={r} value={r}>{t(r)}</option>)}</select></label>}
     <label className="flex items-start gap-3 text-sm text-muted-foreground"><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} className="mt-1 accent-primary"/>{t("Saya setuju menyimpan profil hanya di perangkat ini. Gunakan data fiktif untuk mencoba prototipe.")}</label><Link to="/transparansi" className="text-sm text-primary underline">{t("Tentang data & sumber")}</Link>{error && <p role="alert" className="text-destructive text-sm">{t(error)}</p>}<Button type="submit" className="w-full" size="lg">{t(initial ? 'Simpan perubahan' : 'Mulai bersama')}<ArrowRight /></Button>
   </form>;
 }
@@ -57,7 +58,7 @@ export function StartGate({ children }: {
         return <div className="py-24 text-center text-muted-foreground">{t("Menyiapkan ruang bermain\u2026")}</div>;
     if (state.children.length)
         return <>{children}</>;
-    return <section className="start-gate"><div className="start-icon"><Leaf /></div><p className="eyebrow">{t("SELAMAT DATANG DI ASAH")}</p><h1>{t("Momen kecil.")}<br />{t("Tumbuh bersama.")}</h1><p>{t("Satu kegiatan sederhana untuk menemani si kecil hari ini.")}</p><div className="flex flex-wrap justify-center gap-3"><Button size="lg" onClick={() => setOpen(true)}>{t("Tambah profil anak ")}<ArrowRight /></Button><Button size="lg" variant="outline" onClick={() => { const c = sampleChild(now); update(s => ({ ...s, children: [c], selected: c.id, consent: true })); }}>{t("Coba profil contoh")}</Button></div><p className="text-xs text-muted-foreground">{t("Prototipe \u00B7 Data disimpan hanya di perangkat ini")}</p><Modal title={t("Kenalan dengan si kecil")} description={t("Satu profil, kegiatan sesuai kelompok usia. Tidak perlu membuat akun.")} open={open} close={() => setOpen(false)}><ChildForm onDone={() => setOpen(false)}/></Modal></section>;
+    return <section className="start-gate"><div className="start-icon"><Leaf /></div><p className="eyebrow">{t("SELAMAT DATANG DI ASAH")}</p><h1>{t("Momen kecil.")}<br />{t("Tumbuh bersama.")}</h1><p>{t("Satu kegiatan sederhana untuk menemani si kecil hari ini.")}</p><div className="flex flex-wrap justify-center gap-3"><Button size="lg" onClick={() => setOpen(true)}>{t("Tambah profil anak ")}<ArrowRight /></Button><Button size="lg" variant="outline" onClick={() => { const c = sampleChild(now); update(s => ({ ...s, children: [c], selected: c.id, consent: true, role: s.role || 'Ayah' })); }}>{t("Coba profil contoh")}</Button></div><p className="text-xs text-muted-foreground">{t("Prototipe \u00B7 Data disimpan hanya di perangkat ini")}</p><Modal title={t("Kenalan dengan si kecil")} description={t("Satu profil, kegiatan sesuai kelompok usia. Tidak perlu membuat akun.")} open={open} close={() => setOpen(false)}><ChildForm onDone={() => setOpen(false)}/></Modal></section>;
 }
 export function Upgrade({ open, close }: {
     open: boolean;

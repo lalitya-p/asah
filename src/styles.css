@@ -317,3 +317,60 @@ button,a,select,input { -webkit-tap-highlight-color: transparent; }
   .list-toolbar { flex-wrap:wrap; }
   .profile-row { gap:8px; flex-wrap:wrap; }
 }
+
+/* Consistency pass: shared spacing scale, footer, sheet, filter select, child picker. */
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+}
+.page-content { padding: var(--space-5) var(--space-4); }
+.page-heading { margin-bottom: var(--space-5); }
+.section-top { margin-bottom: var(--space-3); }
+.today-card-body { padding: var(--space-4); }
+.settings-section { padding: var(--space-5) 0; }
+.saved-card { padding: var(--space-4); }
+.history-item { padding: var(--space-4) 0; }
+.guidance-band { padding: var(--space-5) 0; gap: var(--space-4); }
+.guidance-columns { gap: var(--space-4); padding: var(--space-4) 0 var(--space-5); }
+.section-title { margin: var(--space-5) 0 var(--space-3); }
+.focus-grid { gap: var(--space-3); }
+.concern-preview { margin: var(--space-5) 0; padding: var(--space-4); }
+
+/* Footer: separated from the fixed bottom navigation, consistent type. */
+.page-footer { margin: var(--space-4) auto 0; padding: var(--space-4); font-size: 12px; line-height: 1.7; gap: 10px; flex-wrap: wrap; }
+.page-footer a { white-space: normal; }
+@media(max-width:800px) {
+  .page-footer { margin-bottom: 0; padding-bottom: calc(96px + env(safe-area-inset-bottom)); font-size: 12px; }
+  .page-footer a { margin-left: 0; }
+}
+
+/* Shared filter dropdown (Riwayat & Tersimpan). */
+.filter-select { width: auto; min-width: 170px; max-width: 100%; min-height: 44px; margin: 0; padding: 0 40px 0 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--card) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23777' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center; appearance: none; font-size: 14px; }
+.list-toolbar { gap: var(--space-3); flex-wrap: wrap; margin-bottom: var(--space-4); }
+
+/* Bottom sheet: consistent padding, safe-area, standard form rhythm. */
+.asah-dialog { padding: var(--space-4); }
+.asah-dialog form { display: flex; flex-direction: column; gap: 20px; }
+.asah-dialog form .field-label { margin: 0; }
+@media(max-width:800px) {
+  .asah-dialog { padding: 28px var(--space-4) calc(var(--space-4) + env(safe-area-inset-bottom)); }
+}
+
+/* Child picker: first name in header (truncated), full names in the sheet. */
+.child-trigger { height: auto; min-height: 44px; padding: 6px 12px 6px 6px; gap: 8px; border-radius: 24px; }
+.child-meta { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.child-name { max-width: 110px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; font-size: 13px; }
+.child-meta small { color: var(--muted-foreground); font-size: 11px; }
+.child-picker { display: flex; flex-direction: column; gap: var(--space-2); }
+.child-option { justify-content: flex-start; gap: 12px; height: auto; min-height: 64px; padding: 10px 12px; width: 100%; }
+.child-option .child-name { max-width: none; font-size: 15px; }
+.child-option.active { background: var(--secondary); }
+.child-option>svg { margin-left: auto; color: var(--primary); flex-shrink: 0; }
+@media(max-width:450px) {
+  .child-name { max-width: 72px; }
+  .child-meta small { display: none; }
+}

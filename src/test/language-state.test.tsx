@@ -8,7 +8,7 @@ it('switches between English and Indonesian without changing child records or qu
  let store: ReturnType<typeof useAsah> | undefined;
  function Probe(){controls=useLanguage();store=useAsah();return null;}
  render(<LanguageProvider><AsahProvider><Probe/></AsahProvider></LanguageProvider>);
- act(()=>store?.update(s=>({...s,children:[{id:'child',name:'Bima',dob:'2023-04-12',role:'Ayah'}],selected:'child',days:{child:{day:'2026-11-14',used:4,choice:4,duration:5}}})));
+ act(()=>store?.update(s=>({...s,children:[{id:'child',name:'Bima',dob:'2023-04-12'}],selected:'child',days:{child:{day:'2026-11-14',used:4,choice:4,duration:5}}})));
  const before=JSON.stringify(store?.state);
  act(()=>controls?.setLanguage('en'));
  expect(controls?.language).toBe('en');

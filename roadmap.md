@@ -9,3 +9,5 @@
 - [x] Simulated Free/Pro flow, concern notes and transparency
 - [x] Offline shell, sharing and data controls
 - [x] End-to-end mobile/desktop validation and commit
+- [x] UI/UX audit fixes: footer, spacing system, header name, sheet, dropdowns, Perkembangan layout
+- [x] Account-level caregiver role with legacy data migration

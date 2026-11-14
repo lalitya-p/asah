@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { addCompletion, ageMonths, currentDay, editObservation, jakartaDay, replaceActivity, setDuration, stageFor, type Completion, type DayState } from '@/lib/asah';
+import { addCompletion, ageMonths, currentDay, editObservation, jakartaDay, migrateState, replaceActivity, setDuration, stageFor, type Completion, type DayState } from '@/lib/asah';
 import { activities, activityFor, durationSteps } from '@/lib/catalog';
 const day: DayState = { day:'2026-11-14',used:0,choice:0,duration:5 };
 describe('Approved primary age stages',()=>{
@@ -28,4 +28,8 @@ describe('Sample catalog safeguards',()=>{
  it('under-three activities contain speech prompts and supervision/mouthing safety',()=>{for(const a of activities.filter(a=>a.stage<=3)){expect(a.speech.length).toBeGreaterThan(10);expect(a.safety).toContain('Selalu dampingi');expect(a.safety).toContain('masuk mulut');}});
  it('all seven required content fields are present',()=>{for(const a of activities){expect(a.stage).toBeGreaterThan(0);expect(a.focus.length).toBeGreaterThan(0);expect(a.aim.length).toBeGreaterThan(0);expect(a.materials.length).toBeGreaterThan(0);expect(a.steps.length).toBeGreaterThan(0);expect(a.observe.length).toBeGreaterThan(0);expect(a.safety.length).toBeGreaterThan(0);}});
  it('duration variants provide different steps without changing classification',()=>{const a=activityFor(4,0);expect(a).toBeDefined();if(!a)return;expect(durationSteps(a,1)).toHaveLength(2);expect(durationSteps(a,5)).toHaveLength(3);expect(durationSteps(a,10)).toHaveLength(4);expect(a.stage).toBe(4);});
+});describe('Account-level caregiver role',()=>{
+ it('adopts the first child\'s legacy role and strips per-child roles',()=>{const migrated=migrateState({children:[{id:'a',name:'Nara',dob:'2023-01-01',role:'Ayah'},{id:'b',name:'Bima',dob:'2024-01-01',role:'Ibu'}],selected:'a',plan:'free',days:{},logs:[],saved:[],consent:true});expect(migrated.role).toBe('Ayah');expect(migrated.children).toEqual([{id:'a',name:'Nara',dob:'2023-01-01'},{id:'b',name:'Bima',dob:'2024-01-01'}]);});
+ it('keeps an existing account role and leaves other data untouched',()=>{const migrated=migrateState({children:[{id:'a',name:'Nara',dob:'2023-01-01',role:'Ibu'}],selected:'a',plan:'pro',role:'Kakek / Nenek',days:{},logs:[],saved:[],consent:true});expect(migrated.role).toBe('Kakek / Nenek');expect(migrated.plan).toBe('pro');});
+ it('defaults to an empty role when no role was ever stored',()=>expect(migrateState({children:[],selected:'',plan:'free',days:{},logs:[],saved:[],consent:false}).role).toBe(''));
 });

@@ -1,11 +1,18 @@
 export type Plan = 'free' | 'pro';
 export type Response = 'Ya' | 'Sedikit' | 'Belum';
-export type Child = { id: string; name: string; dob: string; role: string };
+export type Child = { id: string; name: string; dob: string };
+export const caregiverRoles = ['Ibu', 'Ayah', 'Kakek / Nenek', 'Pengasuh'] as const;
 export type DayState = { day: string; used: number; choice: number; duration: 1 | 5 | 10 };
 export type Completion = { id: string; childId: string; activityId: string; title: string; focus: string; stage: number; duration: number; at: string; response: Response };
 export type Saved = { activityId: string; childId: string; stage: number; duration: 1 | 5 | 10 };
-export type AppState = { children: Child[]; selected: string; plan: Plan; days: Record<string, DayState>; logs: Completion[]; saved: Saved[]; consent: boolean };
-export const emptyState: AppState = { children: [], selected: '', plan: 'free', days: {}, logs: [], saved: [], consent: false };
+export type AppState = { children: Child[]; selected: string; plan: Plan; role: string; days: Record<string, DayState>; logs: Completion[]; saved: Saved[]; consent: boolean };
+export const emptyState: AppState = { children: [], selected: '', plan: 'free', role: '', days: {}, logs: [], saved: [], consent: false };
+// Caregiver role lives at account level. Older saves stored it per child; adopt the
+// first child's role once and strip per-child roles without touching other data.
+export function migrateState(parsed: Partial<AppState> & { children?: (Child & { role?: string })[] }): AppState {
+  const children = (parsed.children ?? []).map(({ id, name, dob }) => ({ id, name, dob }));
+  return { ...emptyState, ...parsed, children, role: typeof parsed.role === 'string' && parsed.role ? parsed.role : parsed.children?.[0]?.role ?? '' };
+}
 
 export function jakartaDay(now: Date): string {
   const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(now);
@@ -51,5 +58,5 @@ export function editObservation(logs: Completion[], id: string, response: Respon
 export function addCompletion(logs: Completion[], completion: Completion): Completion[] { return [completion, ...logs]; }
 export function sampleChild(now: Date): Child {
   const [y = 2026, m = 11] = jakartaDay(now).split('-').map(Number);
-  return { id: 'sample-nara', name: 'Nara', dob: `${y - 3}-${String(m).padStart(2, '0')}-01`, role: 'Ayah' };
+  return { id: 'sample-nara', name: 'Nara', dob: `${y - 3}-${String(m).padStart(2, '0')}-01` };
 }
