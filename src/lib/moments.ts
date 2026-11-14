@@ -17,3 +17,7 @@ export function childMoments(logs: Completion[], childId: string | undefined) {
 export function momentsInArea(moments: Completion[], area: AreaId) {
   return moments.filter(m => m.areas?.includes(area));
 }
+/** A new garden contains seeds only; logging any moment triggers the existing grown artwork. */
+export function gardenHasGrowth(momentCount: number) {
+  return momentCount > 0;
+}

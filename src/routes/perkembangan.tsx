@@ -5,10 +5,11 @@ import { StartGate } from '@/components/asah/shared';
 import { ActivityCarousel } from '@/components/asah/ActivityCarousel';
 import { AreaIcon } from '@/components/asah/area-icon';
 import { AREAS, NOTICE_OPTIONS, getActivity } from '@/data/asahActivities';
-import { activitiesForAge, ageGroupLabel, areaIds, childMoments, momentsInArea } from '@/lib/moments';
+import { activitiesForAge, ageGroupLabel, areaIds, childMoments, gardenHasGrowth, momentsInArea } from '@/lib/moments';
 import { ageMonths } from '@/lib/asah';
 import { pageHead } from '@/lib/page-head';
 import garden from '@/assets/asah/garden.svg.asset.json';
+import gardenSeeds from '@/assets/asah/garden-seeds.svg';
 
 export const Route = createFileRoute('/perkembangan')({ head: () => pageHead('Perkembangan', 'Ide main sesuai kelompok usia Buku KIA dan momen yang kamu perhatikan, tanpa penilaian.'), component: Development });
 
@@ -30,7 +31,7 @@ function Development() {
   return <StartGate><div className="dev-page">
     <header className="dev-head"><h1>{name}{inRange && <> · {ageGroupLabel(months, lang)}</>}</h1><p>{copy.tagline[lang]}</p></header>
     {inRange ? <ActivityCarousel activities={activitiesForAge(months)} lang={lang} /> : <p className="dev-empty">{copy.over[lang]}</p>}
-    <section className="dev-garden"><img src={garden.url} alt="" /><div>{lang === 'en' ? `${moments.length} moment${moments.length === 1 ? "" : "s"} with ${name}` : `${moments.length} momen bersama ${name}`}</div></section>
+    <section className="dev-garden"><img src={gardenHasGrowth(moments.length) ? garden.url : gardenSeeds} alt="" /><div>{lang === 'en' ? `${moments.length} moment${moments.length === 1 ? "" : "s"} with ${name}` : `${moments.length} momen bersama ${name}`}</div></section>
     <section className="dev-areas"><h2>{copy.noticed[lang]}</h2>
       {areaIds.map(id => { const inArea = momentsInArea(moments, id); const latest = inArea[0]; return (
         <div key={id} className="dev-area">
