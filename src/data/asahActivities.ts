@@ -289,7 +289,22 @@ const CORE_ACTIVITIES: Activity[] = [
 
 // Every age group gets its own ideas, so the Development carousel is never
 // empty for a child outside the 6–9 month window.
-export const ACTIVITIES: Activity[] = [...CORE_ACTIVITIES, ...ACTIVITIES_BY_AGE];
+// Step pictures live in assets/asah/steps as <activity-id>-<step-number>.jpg and
+// are attached here, so a step without a hand-picked image gets one automatically.
+const STEP_IMAGES = import.meta.glob<string>("../assets/asah/steps/*.jpg", {
+  eager: true,
+  import: "default",
+});
+const stepImage = (id: string, n: number) => STEP_IMAGES[`../assets/asah/steps/${id}-${n}.jpg`];
+
+export const ACTIVITIES: Activity[] = [...CORE_ACTIVITIES, ...ACTIVITIES_BY_AGE].map((a) => ({
+  ...a,
+  steps: a.steps.map((s, i) => {
+    if (s.image) return s;
+    const image = stepImage(a.id, i + 1);
+    return image ? { ...s, image, alt: s.alt ?? s.title } : s;
+  }),
+}));
 
 // Answer choices on the log screen. Every answer counts; none is "wrong".
 export const NOTICE_OPTIONS: Text[] = [
