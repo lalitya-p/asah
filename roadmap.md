@@ -1,4 +1,6 @@
 # Asah prototype
+- [x] Switchable English and Bahasa Indonesia, all pages and shared materials
+- [x] Verify language persistence and unchanged family records
 - [x] Rules, stage catalog and tests
 - [x] Daily activities, onboarding and multi-child profiles
 - [x] History, saved activities and developmental guidance

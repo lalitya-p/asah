@@ -15,6 +15,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AsahProvider } from '@/components/asah/store';
 import { AsahShell } from '@/components/asah/shell';
 import { Toaster } from '@/components/ui/sonner';
+import { LanguageProvider } from '@/components/asah/language';
 
 function NotFoundComponent() {
   return (
@@ -128,7 +129,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <AsahProvider><AsahShell><Outlet /></AsahShell><Toaster position="top-center" /></AsahProvider>
+      <LanguageProvider><AsahProvider><AsahShell><Outlet /></AsahShell><Toaster position="top-center" /></AsahProvider></LanguageProvider>
     </QueryClientProvider>
   );
 }
