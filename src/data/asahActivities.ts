@@ -4,6 +4,10 @@
 // SAMPLE CONTENT: needs pediatric review before launch.
 
 
+import cilukba1 from "@/assets/asah/cilukba-1.svg.asset.json";
+import cilukba2 from "@/assets/asah/cilukba-2.svg.asset.json";
+import cilukba3 from "@/assets/asah/cilukba-3.svg.asset.json";
+
 export type Lang = "id" | "en";
 export type Text = Record<Lang, string>;
 export type AreaId = "moving" | "hands" | "talking" | "others";
@@ -51,16 +55,19 @@ export const ACTIVITIES: Activity[] = [
       {
         title: { id: "Tutup wajahmu", en: "Hide your face" },
         text: { id: "Duduk berhadapan. Tutup wajah dengan tangan atau kain lembut.", en: "Sit face to face. Cover your face with your hands or a soft cloth." },
+        image: cilukba1.url,
         alt: { id: "Tangan menutup wajah", en: "Hands covering the face" },
       },
       {
         title: { id: "Jeda dan intip", en: "Pause and peek" },
         text: { id: "Ucapkan \"ciluk...\" pelan-pelan. Tunggu sebentar supaya si kecil penasaran.", en: "Say \"ciluk...\" slowly. Wait a moment so your little one wonders where you went." },
+        image: cilukba2.url,
         alt: { id: "Mengintip dengan satu mata", en: "Peeking out with one eye" },
       },
       {
         title: { id: "Muncul: \"Ba!\"", en: "Pop out: \"Ba!\"" },
         text: { id: "Buka tangan sambil tersenyum lebar. Ulangi beberapa kali selama si kecil senang.", en: "Open your hands with a big smile. Repeat a few times while your little one enjoys it." },
+        image: cilukba3.url,
         alt: { id: "Tangan terbuka dengan senyum lebar", en: "Hands open wide with a big smile" },
       },
     ],
