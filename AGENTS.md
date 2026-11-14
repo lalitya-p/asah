@@ -31,6 +31,7 @@ use the editor.
 
 ## Prototype architecture
 - Keep prototype state in a shared browser-storage provider, read after hydration; approved device-only data must stay separate from production services.
+- Preserve the shared context identity in Vite hot data during preview updates so mounted providers and refreshed consumers cannot become disconnected.
 - Keep age classification, daily quotas, and completion edits in pure domain functions with concrete rule tests so dates and per-child limits remain consistent.
 - Use a static sample activity catalog and explicitly selected concern scenarios; caregiver observations must never infer clinical status.
 - Use leaf TanStack routes inside the root shared shell; each page owns its metadata and the service worker caches the web shell for offline reading.
