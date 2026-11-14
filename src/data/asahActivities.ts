@@ -1,4 +1,4 @@
-// Asah: play activities for the Development (Perkembangan) page.
+// Asah: age-based play activities for Today and the activity detail pages.
 // Age groups follow Buku KIA: every 3 months to 1 year, every 6 months to 2 years, then yearly.
 // All copy is Asah's own wording, not Buku KIA checklist items.
 // SAMPLE CONTENT: needs pediatric review before launch.

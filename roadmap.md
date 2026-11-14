@@ -11,3 +11,4 @@
 - [x] Verify replacement limits, languages, phone/desktop and end-to-end flows
 - [x] Streamline onboarding order, persist the role once, show inline theory, and migrate saved progress
 - [x] Add varied Development activities, visible benefits, and accessible carousel navigation
+- [x] Move the activity carousel to Today and open Development with the garden

@@ -9,15 +9,15 @@ import { pageHead } from '@/lib/page-head';
 export const Route = createFileRoute('/aktivitas/$id/catat')({ head: () => pageHead('Catat momen', 'Catat apa yang kamu perhatikan saat bermain. Tidak ada jawaban yang salah.'), component: LogMoment });
 
 const copy = {
-  back: { id: 'Kembali', en: 'Back' }, kicker: { id: 'MAIN MALAM INI', en: "TONIGHT'S PLAY" },
+  back: { id: 'Kembali', en: 'Back' }, kicker: { id: 'AKTIVITAS HARI INI', en: "TODAY'S PLAY" },
   question: { id: 'Bagaimana', en: 'How did' }, question2: { id: 'tadi?', en: 'go?' },
   sub: { id: 'Pilih yang kamu perhatikan. Tidak ada jawaban yang salah.', en: "Pick what you noticed. There's no right answer." },
   note: { id: 'Ada yang ingin diingat? (opsional)', en: "Anything you'd like to remember? (optional)" },
   savedUnder: { id: 'Disimpan di', en: 'Saved under' }, and: { id: 'dan', en: 'and' },
   save: { id: 'Simpan momen ini', en: 'Save this moment' }, saved: { id: 'MOMEN TERSIMPAN', en: 'MOMENT SAVED' },
   youNoticed: { id: 'Kamu memperhatikan:', en: 'You noticed:' },
-  present: { id: 'Apa pun yang terjadi malam ini, kamu ada di sana.', en: 'Whatever happened tonight, you were there for it.' },
-  backDev: { id: 'Kembali ke Perkembangan', en: 'Back to Development' }, another: { id: 'Catat momen lain', en: 'Log another moment' },
+  present: { id: 'Apa pun yang terjadi hari ini, kamu ada di sana.', en: 'Whatever happened today, you were there for it.' },
+  backToday: { id: 'Kembali ke Hari ini', en: 'Back to Today' }, another: { id: 'Catat momen lain', en: 'Log another moment' },
 };
 
 function LogMoment() {
@@ -28,7 +28,7 @@ function LogMoment() {
   const [choice, setChoice] = useState<number | null>(null);
   const [note, setNote] = useState('');
   const [saved, setSaved] = useState(false);
-  if (!a) return <div className="dev-page"><Link to="/perkembangan" className="dev-back">← {copy.back[lang]}</Link></div>;
+  if (!a) return <div className="dev-page"><Link to="/" className="dev-back">← {copy.backToday[lang]}</Link></div>;
   const areaNames = a.areas.map(x => AREAS[x].label[lang]).join(` ${copy.and[lang]} `);
   const save = () => {
     if (choice === null || !child) return;
@@ -47,7 +47,7 @@ function LogMoment() {
       <div className="dev-kicker">{copy.saved[lang]}</div>
       <h1>{copy.youNoticed[lang]} {NOTICE_OPTIONS[choice ?? 0]?.[lang].toLowerCase()}</h1>
       <p>{a.why[lang]} {copy.present[lang]}</p>
-      <Link to="/perkembangan" className="dev-primary">{copy.backDev[lang]}</Link>
+      <Link to="/" className="dev-primary">{copy.backToday[lang]}</Link>
       <button type="button" className="dev-link" onClick={() => { setChoice(null); setNote(''); setSaved(false); }}>{copy.another[lang]}</button>
     </div>}
   </div>;

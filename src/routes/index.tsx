@@ -1,62 +1,84 @@
-import { useLanguage } from '@/components/asah/language';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { useState } from 'react';
-import { ArrowRight, Bookmark, Check, Clock3, Heart, RefreshCw, ShieldCheck, Sparkles, Sprout, X } from 'lucide-react';
-import { toast } from 'sonner';
+import { ArrowRight, Check, Heart, ShieldCheck, Sprout } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
-import { ActivityDetail, Modal, PageHeading, ReviewNote, Upgrade } from '@/components/asah/shared';
-import { addCompletion, ageMonths, currentDay, editObservation, replaceActivity, setDuration, stageFor, type Response } from '@/lib/asah';
-import { activityEligibility, activityFor, stages } from '@/lib/catalog';
-import { missingMaterialLabels } from '@/lib/inventory';
+import { ActivityCarousel } from '@/components/asah/ActivityCarousel';
+import { PageHeading } from '@/components/asah/shared';
+import { ageMonths, currentDay, stageFor } from '@/lib/asah';
+import { stages } from '@/lib/catalog';
+import { activitiesForAge } from '@/lib/moments';
 import { pageHead } from '@/lib/page-head';
-import playTogether from '@/assets/play-together.jpg';
-export const Route = createFileRoute('/')({ head: () => pageHead('Hari ini', 'Satu aktivitas sederhana sesuai usia anak untuk bermain bersama hari ini.'), component: Index });
-function Index() { const { t, locale } = useLanguage(); return <Today />; }
+
+export const Route = createFileRoute('/')({
+  head: () => pageHead('Hari ini', 'Pilihan aktivitas sederhana sesuai usia anak untuk bermain bersama hari ini.'),
+  component: Index,
+});
+
+function Index() {
+  return <Today />;
+}
+
 function Today() {
-    const { t, locale, language } = useLanguage();
-    const { state, update, child, now } = useAsah();
-    const [detail, setDetail] = useState(false);
-    const [complete, setComplete] = useState(false);
-    const [pendingCompletion, setPendingCompletion] = useState<{ id: string; activityId: string } | null>(null);
-    const [upgrade, setUpgrade] = useState(false);
-    const [dismiss, setDismiss] = useState('');
-    if (!child)
-        return null;
-    const stage = stageFor(ageMonths(child.dob, now));
-    const day = currentDay(state.days[child.id], now);
-    const previousActivity = stage ? activityFor(stage, day.choice) : undefined;
-    const activity = stage ? activityFor(stage, day.choice, state.inventory) : undefined;
-    const previousEligibility = previousActivity ? activityEligibility(previousActivity, state.inventory) : undefined;
-    const framework = stages.find(s => s.id === stage);
-    const limited = state.plan === 'free' && day.used >= 5;
-    const logs = state.logs.filter(l => l.childId === child.id);
-    const todayLogs = logs.filter(l => currentDay(undefined, new Date(l.at)).day === day.day);
-    function finishPlaying() {
-        if (!child || !activity || !stage) return;
-        if (pendingCompletion?.activityId !== activity.id) {
-            const id = crypto.randomUUID();
-            update(s => ({ ...s, logs: addCompletion(s.logs, { id, childId: child.id, activityId: activity.id, title: activity.title, focus: activity.focus, areas: activity.areas, stage, duration: day.duration, at: new Date().toISOString() }) }));
-            setPendingCompletion({ id, activityId: activity.id });
-            toast.success(t('Momen bermain tercatat. Terima kasih sudah hadir.'));
-        }
-        setComplete(true);
-    }
-    function closeDetail() { setDetail(false); setPendingCompletion(null); }
-    function log(response: Response) {
-        if (!child || !activity || !stage) return;
-        if (pendingCompletion?.activityId === activity.id) {
-            update(s => ({ ...s, logs: editObservation(s.logs, pendingCompletion.id, response) }));
-        } else {
-            update(s => ({ ...s, logs: addCompletion(s.logs, { id: crypto.randomUUID(), childId: child.id, activityId: activity.id, title: activity.title, focus: activity.focus, areas: activity.areas, stage, duration: day.duration, at: new Date().toISOString(), response }) }));
-        }
-        setPendingCompletion(null); setComplete(false); setDetail(false);
-    }
-    return <><PageHeading eyebrow={t("SEDIKIT WAKTU, BANYAK MAKNA")} title={t(`Hari ini, bersama ${child.name}.`)}>{t("Tidak perlu sempurna. Satu momen bermain sudah berarti.")}</PageHeading><div className="today-layout"><div className="today-main"><div className="section-top"><h2><Sparkles size={18}/>{t("Aktivitas hari ini")}</h2><span className="date-label">{t(new Intl.DateTimeFormat(locale, { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'long', year: 'numeric' }).format(now))}</span></div><div className="duration-row"><span>{t("Punya waktu berapa?")}</span><div className="duration-control" role="group" aria-label={t("Durasi aktivitas")}>{([1, 5, 10] as const).map(d => <Button key={d} variant="ghost" aria-pressed={day.duration === d} className={day.duration === d ? 'selected' : ''} onClick={() => update(s => ({ ...s, days: { ...s.days, [child.id]: setDuration(currentDay(s.days[child.id], now), d) } }))}><Clock3 />{d}{t(" menit")}</Button>)}</div></div>
- {activity ? <article className="today-card"><div className="activity-art"><img src={playTogether} alt={t("Ayah dan anak bermain bersama menggunakan wadah di rumah")} width={1024} height={768}/><span className="art-tag"><Heart size={13}/>{t("Main bareng, tumbuh bareng")}</span></div><div className="today-card-body"><div className="flex flex-wrap gap-2"><span className="pill pill-coral">{t(activity.focus)}</span><span className="pill">{t(framework?.label)}</span></div><h2>{t(activity.title)}</h2><p>{t(activity.subtitle)}</p><div className="card-materials"><span>{t("Yang dibutuhkan")}</span><strong>{t(activity.materials.join(' · '))}</strong></div><div className="card-bottom"><Button size="lg" onClick={() => setDetail(true)}>{t("Yuk, mulai bermain ")}<ArrowRight /></Button><Button variant="ghost" size="icon" title={t("Simpan aktivitas")} aria-label={t("Simpan aktivitas")} onClick={() => { const exists = state.saved.some(v => v.childId === child.id && v.activityId === activity.id); update(s => ({ ...s, saved: exists ? s.saved.filter(v => !(v.childId === child.id && v.activityId === activity.id)) : [...s.saved, { childId: child.id, activityId: activity.id, stage: activity.stage, duration: day.duration }] })); toast.success(t(exists ? 'Aktivitas dihapus dari tersimpan.' : 'Aktivitas tersimpan di perangkat.')); }}><Bookmark fill={state.saved.some(v => v.childId === child.id && v.activityId === activity.id) ? 'currentColor' : 'none'}/></Button></div><ReviewNote /></div></article> : <div className="empty-state"><Sprout /><h2>{t("Setiap usia punya perjalanan.")}</h2><p>{t("Aktivitas Asah tersedia untuk anak di bawah 6 tahun. Profil dan catatan lama tetap dapat dibuka.")}</p><Button variant="outline" asChild><Link to="/pengaturan">{t("Periksa profil")}</Link></Button></div>}
- {previousActivity && previousEligibility && !previousEligibility.eligible && previousActivity.id !== activity?.id && <div className="inventory-notice"><strong>{language === 'en' ? 'Today’s activity changed to match your home.' : 'Aktivitas hari ini disesuaikan dengan barang di rumah.'}</strong><p>{language === 'en' ? `${t(previousActivity.title)} needs: ${missingMaterialLabels(previousEligibility.missing, language).join(', ') || 'completed inventory setup'}.` : `${t(previousActivity.title)} membutuhkan: ${missingMaterialLabels(previousEligibility.missing, language).join(', ') || 'pengaturan barang yang selesai'}.`}</p><Link to="/pengaturan">{language === 'en' ? 'Update household items' : 'Perbarui barang di rumah'}</Link></div>}
- <div className="replacement-row"><Button variant="ghost" disabled={limited || !activity} onClick={() => { update(s => ({ ...s, days: { ...s.days, [child.id]: replaceActivity(currentDay(s.days[child.id], now), s.plan) } })); }}><RefreshCw />{t("Coba aktivitas lain")}</Button><span>{t(state.plan === 'pro' ? 'Pilihan tanpa batas · simulasi' : `${Math.max(0, 5 - day.used)} dari 5 penggantian tersisa hari ini`)}</span></div>{limited && dismiss !== `${child.id}-${day.day}` && <div className="limit-banner"><div><strong>{t("Pilihan hari ini sudah digunakan.")}</strong><p>{t("Aktivitas ini tetap bisa dimainkan. Pilihan baru tersedia pukul 00.00 WIB.")}</p><Button size="sm" onClick={() => setUpgrade(true)}>{t("Upgrade to Pro ")}<ArrowRight /></Button></div><Button variant="ghost" size="icon" aria-label={t("Tutup ajakan upgrade")} onClick={() => setDismiss(`${child.id}-${day.day}`)}><X /></Button></div>}
- <div className="gentle-note"><Heart /><div><strong>{t("Bermain bukan soal hasil.")}</strong><p>{t("Ikuti rasa ingin tahu si kecil. Berhenti dan coba lagi kapan pun kalian ingin.")}</p></div></div></div>
- <aside className="today-aside"><section className="growth-preview"><span className="eyebrow">{t("MENGENAL TAHAPNYA")}</span><div className="growth-icon"><Sprout /></div><h2>{t(framework?.name ?? 'Perjalanan si kecil')}</h2><p>{t(framework ? `Di kelompok ${framework.label}, bermain membuka ruang untuk ${(framework.focus[0] ?? 'bermain bersama').toLocaleLowerCase('id-ID')}.` : 'Catatan tetap menjadi milik keluarga Anda.')}</p>{framework && <div className="focus-tags">{framework.focus.map(f => <span key={f}>{t(f)}</span>)}</div>}<Button variant="link" asChild><Link to="/perkembangan">{language === 'en' ? `See ${child.name}’s developmental journey` : `Lihat perjalanan perkembangan ${child.name}`}<ArrowRight /></Link></Button><p className="tiny-note">{t("Kerangka usia, bukan penilaian perkembangan.")}</p></section><section className="moments-preview"><div className="section-top"><h3>{t("Momen yang tercatat")}</h3><Heart size={17}/></div>{logs.length ? <><strong className="moment-count">{todayLogs.length}</strong><p>{t("momen bermain hari ini")}</p><div className="recent-moment"><Check size={16}/><span>{t(logs[0]?.title ?? '')}</span></div></> : <><div className="empty-moment"><Heart /></div><p>{t("Setiap usaha kecil layak dikenang.")}</p><span className="tiny-note">{t("Catatan pertama akan muncul setelah bermain.")}</span></>}<Button variant="link" asChild><Link to="/riwayat">{t("Lihat riwayat ")}<ArrowRight /></Link></Button></section><div className="trust-line"><ShieldCheck size={18}/><p>{t("Tanpa skor. Tanpa perbandingan.")}<br />{t("Hanya ruang untuk bertumbuh.")}</p></div></aside></div>
- <Modal title={t(activity?.title ?? 'Aktivitas')} description={t("Bermain mengikuti kenyamanan anak. Semua contoh belum ditinjau dokter anak.")} open={detail} close={closeDetail}>{activity && <ActivityDetail activity={activity} duration={day.duration} onComplete={finishPlaying}/>}</Modal><Modal title={t("Bagaimana momen tadi?")} description={t("Apakah si kecil mencoba? Tidak ada jawaban benar atau salah.")} open={complete} close={() => setComplete(false)}><div className="response-options">{(['Ya', 'Sedikit', 'Belum'] as const).map(r => <Button key={r} variant="outline" size="lg" onClick={() => log(r)}>{t(r)}</Button>)}</div><p className="text-xs text-muted-foreground">{t("Satu catatan untuk setiap kesempatan bermain. Bisa diubah di riwayat.")}</p></Modal><Upgrade open={upgrade} close={() => setUpgrade(false)}/></>;
+  const { t, locale, language } = useLanguage();
+  const { state, child, now } = useAsah();
+  if (!child) return null;
+
+  const months = ageMonths(child.dob, now);
+  const stage = stageFor(months);
+  const day = currentDay(state.days[child.id], now);
+  const framework = stages.find(s => s.id === stage);
+  const logs = state.logs.filter(l => l.childId === child.id);
+  const todayLogs = logs.filter(l => currentDay(undefined, new Date(l.at)).day === day.day);
+  const inRange = months >= 0 && months < 72;
+
+  return <>
+    <PageHeading eyebrow={t('SEDIKIT WAKTU, BANYAK MAKNA')} title={t(`Hari ini, bersama ${child.name}.`)}>
+      {t('Tidak perlu sempurna. Satu momen bermain sudah berarti.')}
+    </PageHeading>
+    <div className="today-layout">
+      <div className="today-main">
+        {inRange ? <>
+          <div className="section-top home-activity-date">
+            <span className="date-label">{t(new Intl.DateTimeFormat(locale, { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'long', year: 'numeric' }).format(now))}</span>
+          </div>
+          <ActivityCarousel activities={activitiesForAge(months, state.inventory)} lang={language} />
+        </> : <div className="empty-state">
+          <Sprout />
+          <h2>{t('Setiap usia punya perjalanan.')}</h2>
+          <p>{t('Aktivitas Asah tersedia untuk anak di bawah 6 tahun. Profil dan catatan lama tetap dapat dibuka.')}</p>
+          <Button variant="outline" asChild><Link to="/pengaturan">{t('Periksa profil')}</Link></Button>
+        </div>}
+        <div className="gentle-note">
+          <Heart />
+          <div><strong>{t('Bermain bukan soal hasil.')}</strong><p>{t('Ikuti rasa ingin tahu si kecil. Berhenti dan coba lagi kapan pun kalian ingin.')}</p></div>
+        </div>
+      </div>
+      <aside className="today-aside">
+        <section className="growth-preview">
+          <span className="eyebrow">{t('MENGENAL TAHAPNYA')}</span>
+          <div className="growth-icon"><Sprout /></div>
+          <h2>{t(framework?.name ?? 'Perjalanan si kecil')}</h2>
+          <p>{t(framework ? `Di kelompok ${framework.label}, bermain membuka ruang untuk ${(framework.focus[0] ?? 'bermain bersama').toLocaleLowerCase('id-ID')}.` : 'Catatan tetap menjadi milik keluarga Anda.')}</p>
+          {framework && <div className="focus-tags">{framework.focus.map(f => <span key={f}>{t(f)}</span>)}</div>}
+          <Button variant="link" asChild><Link to="/perkembangan">{language === 'en' ? `See ${child.name}’s developmental journey` : `Lihat perjalanan perkembangan ${child.name}`}<ArrowRight /></Link></Button>
+          <p className="tiny-note">{t('Kerangka usia, bukan penilaian perkembangan.')}</p>
+        </section>
+        <section className="moments-preview">
+          <div className="section-top"><h3>{t('Momen yang tercatat')}</h3><Heart size={17} /></div>
+          {logs.length ? <>
+            <strong className="moment-count">{todayLogs.length}</strong>
+            <p>{t('momen bermain hari ini')}</p>
+            <div className="recent-moment"><Check size={16} /><span>{t(logs[0]?.title ?? '')}</span></div>
+          </> : <>
+            <div className="empty-moment"><Heart /></div>
+            <p>{t('Setiap usaha kecil layak dikenang.')}</p>
+            <span className="tiny-note">{t('Catatan pertama akan muncul setelah bermain.')}</span>
+          </>}
+          <Button variant="link" asChild><Link to="/riwayat">{t('Lihat riwayat ')}<ArrowRight /></Link></Button>
+        </section>
+        <div className="trust-line"><ShieldCheck size={18} /><p>{t('Tanpa skor. Tanpa perbandingan.')}<br />{t('Hanya ruang untuk bertumbuh.')}</p></div>
+      </aside>
+    </div>
+  </>;
 }

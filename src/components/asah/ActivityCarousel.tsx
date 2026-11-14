@@ -4,7 +4,7 @@ import { ArrowRight, ChevronLeft, ChevronRight, Sprout } from 'lucide-react';
 import { AREAS, type Activity, type Lang } from '@/data/asahActivities';
 
 const copy = {
-  heading: { id: 'Ide main malam ini', en: 'Play ideas for tonight' },
+  heading: { id: 'Aktivitas hari ini', en: "Today's activities" },
   swipe: { id: 'Geser untuk lainnya', en: 'Swipe for more' },
   of: { id: 'dari', en: 'of' },
   min: { id: 'MENIT', en: 'MIN' },

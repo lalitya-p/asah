@@ -8,7 +8,7 @@ import { pageHead } from '@/lib/page-head';
 export const Route = createFileRoute('/aktivitas/$id/')({ head: ({ params }) => pageHead(getActivity(params.id)?.title.id ?? 'Aktivitas', 'Cara main langkah demi langkah bersama si kecil.'), component: ActivityPage });
 
 const copy = {
-  back: { id: 'Kembali', en: 'Back' }, tonight: { id: 'MAIN MALAM INI', en: "TONIGHT'S PLAY" }, min: { id: 'MENIT', en: 'MIN' },
+  back: { id: 'Kembali ke Hari ini', en: 'Back to Today' }, tonight: { id: 'AKTIVITAS HARI INI', en: "TODAY'S PLAY" }, min: { id: 'MENIT', en: 'MIN' },
   how: { id: 'Cara main', en: 'How to play' }, why: { id: 'Kenapa ini membantu', en: 'Why it helps' },
   anyReaction: { id: 'Semua reaksi tidak apa-apa, termasuk hanya memperhatikan.', en: 'Every reaction is fine, even just watching.' },
   log: { id: 'Catat hasilnya', en: 'Log how it went' }, notFound: { id: 'Aktivitas tidak ditemukan.', en: 'Activity not found.' },
@@ -21,7 +21,7 @@ function ActivityPage() {
   const a = getActivity(id);
   const eligibility = a ? evaluateMaterials(a, state.inventory) : undefined;
   return <div className="dev-page">
-    <Link to="/perkembangan" className="dev-back">← {copy.back[lang]}</Link>
+    <Link to="/" className="dev-back">← {copy.back[lang]}</Link>
     {!a ? <p>{copy.notFound[lang]}</p> : <>
       <section className="dev-detail-head">
         <div className="dev-kicker" style={{ color: a.theme.accent }}>{copy.tonight[lang]} · {a.minutes} {copy.min[lang]}</div>
