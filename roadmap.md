@@ -1,4 +1,6 @@
 # Asah prototype
+- [x] Android-style appearance and navigation
+- [x] Verify Android-style screens on phone and desktop
 - [x] Switchable English and Bahasa Indonesia, all pages and shared materials
 - [x] Verify language persistence and unchanged family records
 - [x] Rules, stage catalog and tests
