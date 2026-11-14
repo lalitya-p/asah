@@ -2,11 +2,23 @@ import { describe, expect, it } from 'vitest';
 import { activitiesForAge, ageGroupLabel, childMoments, gardenHasGrowth, momentsInArea } from '@/lib/moments';
 import { addCompletion, editObservation, emptyState, type Completion } from '@/lib/asah';
 import { activities as dailyActivities } from '@/lib/catalog';
-import { ACTIVITIES } from '@/data/asahActivities';
+import { ACTIVITIES, AGE_GROUPS } from '@/data/asahActivities';
+import type { HouseholdInventory } from '@/lib/asah';
 const m = (id: string, noticed: number, areas: string[], childId = 'c'): Completion => ({ id, childId, activityId: 'ciluk-ba', title: '', focus: '', stage: 2, duration: 5, at: '', noticed, areas });
 describe('development moments', () => {
   it('shows only the current Buku KIA group label', () => { expect(ageGroupLabel(7, 'en')).toBe('6–9 months'); expect(ageGroupLabel(30, 'id')).toBe('2–3 tahun'); });
-  it('offers only activities of the current age group', () => { expect(activitiesForAge(7).length).toBe(6); expect(activitiesForAge(13)).toHaveLength(0); });
+  it('offers only activities of the current age group', () => { expect(activitiesForAge(7).length).toBe(6); expect(activitiesForAge(13).length).toBeGreaterThan(0); });
+  it('gives every age group ideas that work without household items', () => {
+    const skipped: HouseholdInventory = { status: 'skipped', items: [] };
+    for (const [from, to] of AGE_GROUPS) {
+      const months = from + 1;
+      const all = activitiesForAge(months);
+      expect(all.length, `${from}-${to} months`).toBeGreaterThan(0);
+      expect(all.every(a => a.ageGroup[0] === from && a.ageGroup[1] === to), `${from}-${to} months`).toBe(true);
+      expect(all.filter(a => a.materialFree).length, `${from}-${to} months material-free`).toBeGreaterThanOrEqual(2);
+      expect(activitiesForAge(months, skipped).length, `${from}-${to} months with skipped inventory`).toBeGreaterThanOrEqual(2);
+    }
+  });
   it('provides a bilingual type, short description, and developmental benefit for every carousel activity', () => {
     for (const activity of ACTIVITIES) {
       expect(activity.category.id.length, activity.id).toBeGreaterThan(0);

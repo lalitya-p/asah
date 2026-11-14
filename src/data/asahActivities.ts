@@ -18,6 +18,7 @@ import sounds2 from "@/assets/asah/sounds-2.svg.asset.json";
 import sounds3 from "@/assets/asah/sounds-3.svg.asset.json";
 
 import type { MaterialMetadata } from "@/lib/inventory";
+import { ACTIVITIES_BY_AGE } from "./asahActivitiesByAge";
 
 export type Lang = "id" | "en";
 export type Text = Record<Lang, string>;
@@ -55,7 +56,7 @@ export interface Activity extends MaterialMetadata {
   safety?: Text;
 }
 
-export const ACTIVITIES: Activity[] = [
+const CORE_ACTIVITIES: Activity[] = [
   {
     id: "ciluk-ba",
     ageGroup: [6, 9],
@@ -285,6 +286,10 @@ export const ACTIVITIES: Activity[] = [
     },
   },
 ];
+
+// Every age group gets its own ideas, so the Development carousel is never
+// empty for a child outside the 6–9 month window.
+export const ACTIVITIES: Activity[] = [...CORE_ACTIVITIES, ...ACTIVITIES_BY_AGE];
 
 // Answer choices on the log screen. Every answer counts; none is "wrong".
 export const NOTICE_OPTIONS: Text[] = [
