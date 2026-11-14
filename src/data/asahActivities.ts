@@ -17,6 +17,8 @@ import sounds1 from "@/assets/asah/sounds-1.svg.asset.json";
 import sounds2 from "@/assets/asah/sounds-2.svg.asset.json";
 import sounds3 from "@/assets/asah/sounds-3.svg.asset.json";
 
+import type { MaterialMetadata } from "@/lib/inventory";
+
 export type Lang = "id" | "en";
 export type Text = Record<Lang, string>;
 export type AreaId = "moving" | "hands" | "talking" | "others";
@@ -38,7 +40,7 @@ export function ageGroupFor(months: number) {
   return AGE_GROUPS.find(([from, to]) => months >= from && months < to) ?? AGE_GROUPS[9];
 }
 
-export interface Activity {
+export interface Activity extends MaterialMetadata {
   id: string;
   ageGroup: readonly [number, number];
   minutes: number;
@@ -59,6 +61,9 @@ export const ACTIVITIES: Activity[] = [
     title: { id: "Ciluk ba", en: "Ciluk ba" },
     description: { id: "Permainan petak umpet dengan wajahmu.", en: "A hide-and-seek game with your face." },
     areas: ["others", "talking"],
+    materialFree: true,
+    requiredMaterials: [],
+    optionalMaterials: [{ itemId: "cloth-large", quantity: 1, substituteItemIds: [] }],
     theme: { bg: "#FBF3E2", accent: "#8A5A1F" },
     steps: [
       {
@@ -92,6 +97,13 @@ export const ACTIVITIES: Activity[] = [
     title: { id: "Botol bunyi", en: "Rice shaker bottle" },
     description: { id: "Mainan kerincing buatan sendiri untuk digenggam dan digoyang.", en: "A homemade rattle to grip and shake." },
     areas: ["hands"],
+    materialFree: false,
+    requiredMaterials: [
+      { itemId: "empty-bottle", quantity: 1, substituteItemIds: [] },
+      { itemId: "rice", quantity: 1, substituteItemIds: [] },
+      { itemId: "tape", quantity: 1, substituteItemIds: [] },
+    ],
+    optionalMaterials: [],
     theme: { bg: "#E9F1F3", accent: "#2D5563" },
     steps: [
       {
@@ -129,6 +141,9 @@ export const ACTIVITIES: Activity[] = [
     title: { id: "Raih bolanya", en: "Reach for the ball" },
     description: { id: "Waktu tengkurap dengan sesuatu yang seru untuk diraih.", en: "Tummy time with something fun to reach for." },
     areas: ["moving"],
+    materialFree: false,
+    requiredMaterials: [{ itemId: "ball-large", quantity: 1, substituteItemIds: [] }],
+    optionalMaterials: [{ itemId: "play-mat", quantity: 1, substituteItemIds: [] }],
     theme: { bg: "#EAF1E7", accent: "#2F6B4F" },
     steps: [
       {
@@ -162,6 +177,9 @@ export const ACTIVITIES: Activity[] = [
     title: { id: "Tiru suaranya", en: "Copy your baby's sounds" },
     description: { id: "Ngobrol bolak-balik yang sederhana dengan si kecil.", en: "A simple back-and-forth chat with your baby." },
     areas: ["talking", "others"],
+    materialFree: true,
+    requiredMaterials: [],
+    optionalMaterials: [],
     theme: { bg: "#F3ECF5", accent: "#6B3F78" },
     steps: [
       {

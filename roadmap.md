@@ -1,13 +1,10 @@
 # Asah prototype
 - [x] Android-style appearance and navigation
-- [x] Verify Android-style screens on phone and desktop
 - [x] Switchable English and Bahasa Indonesia, all pages and shared materials
-- [x] Verify language persistence and unchanged family records
-- [x] Rules, stage catalog and tests
-- [x] Daily activities, onboarding and multi-child profiles
-- [x] History, saved activities and developmental guidance
-- [x] Simulated Free/Pro flow, concern notes and transparency
-- [x] Offline shell, sharing and data controls
-- [x] End-to-end mobile/desktop validation and commit
-- [x] UI/UX audit fixes: footer, spacing system, header name, sheet, dropdowns, Perkembangan layout
+- [x] Rules, stage catalog, daily activities, history and multi-child profiles
 - [x] Account-level caregiver role with legacy data migration
+- [x] Add concise educational onboarding and personalized five-stage journey
+- [x] Add shared household inventory setup, migration and Settings editor
+- [x] Add structured materials and eligibility to both activity catalogs
+- [x] Preserve saved/history records and explain missing materials after inventory changes
+- [x] Verify replacement limits, languages, phone/desktop and end-to-end flows

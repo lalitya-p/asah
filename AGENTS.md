@@ -37,3 +37,4 @@ use the editor.
 - Use leaf TanStack routes inside the root shared shell; each page owns its metadata and the service worker caches the web shell for offline reading.
 - Translate presentation strings through the shared language provider and dictionary; keep stored activity IDs, observations, roles, filters, quotas and dates language-independent so switching never changes family records.
 - Development-area moments are saved as Completion records with language-independent notice index and area IDs, so History and Development read one shared log.
+- Keep household inventory and material eligibility in pure domain functions; store canonical item IDs and explicit substitutes so language changes and custom labels never alter matching.

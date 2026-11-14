@@ -5,13 +5,16 @@ export const caregiverRoles = ['Ibu', 'Ayah', 'Kakek / Nenek', 'Pengasuh'] as co
 export type DayState = { day: string; used: number; choice: number; duration: 1 | 5 | 10 };
 export type Completion = { id: string; childId: string; activityId: string; title: string; focus: string; stage: number; duration: number; at: string; response?: Response; noticed?: number; areas?: string[]; note?: string };
 export type Saved = { activityId: string; childId: string; stage: number; duration: 1 | 5 | 10 };
-export type AppState = { children: Child[]; selected: string; plan: Plan; role: string; days: Record<string, DayState>; logs: Completion[]; saved: Saved[]; consent: boolean };
-export const emptyState: AppState = { children: [], selected: '', plan: 'free', role: '', days: {}, logs: [], saved: [], consent: false };
+export type InventoryEntry = { id: string; quantity: number; customName?: string; equivalentId?: string; category?: string };
+export type InventoryStatus = 'not-set' | 'skipped' | 'complete';
+export type HouseholdInventory = { status: InventoryStatus; items: InventoryEntry[] };
+export type AppState = { children: Child[]; selected: string; plan: Plan; role: string; days: Record<string, DayState>; logs: Completion[]; saved: Saved[]; consent: boolean; inventory: HouseholdInventory };
+export const emptyState: AppState = { children: [], selected: '', plan: 'free', role: '', days: {}, logs: [], saved: [], consent: false, inventory: { status: 'not-set', items: [] } };
 // Caregiver role lives at account level. Older saves stored it per child; adopt the
 // first child's role once and strip per-child roles without touching other data.
 export function migrateState(parsed: Partial<AppState> & { children?: (Child & { role?: string })[] }): AppState {
   const children = (parsed.children ?? []).map(({ id, name, dob }) => ({ id, name, dob }));
-  return { ...emptyState, ...parsed, children, role: typeof parsed.role === 'string' && parsed.role ? parsed.role : parsed.children?.[0]?.role ?? '' };
+  return { ...emptyState, ...parsed, children, role: typeof parsed.role === 'string' && parsed.role ? parsed.role : parsed.children?.[0]?.role ?? '', inventory: parsed.inventory ?? emptyState.inventory };
 }
 
 export function jakartaDay(now: Date): string {
