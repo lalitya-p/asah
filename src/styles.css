@@ -374,3 +374,32 @@ button,a,select,input { -webkit-tap-highlight-color: transparent; }
   .child-name { max-width: 72px; }
   .child-meta small { display: none; }
 }
+
+/* Small phones (≤360px, e.g. 320px "Mobile S") */
+@media (max-width:360px){
+  .topbar{padding-inline:12px;gap:8px;}
+  .topbar-right{gap:6px;min-width:0;}
+  .plan-badge{display:none;}
+  .mobile-brand{font-size:22px;}
+  .child-trigger{padding-inline:4px;min-width:0;}
+  .child-name{max-width:64px;}
+  .page-content{padding-inline:16px;}
+  .page-heading h1{font-size:26px;}
+  .start-gate h1{font-size:32px;}
+  .duration-row{flex-direction:column;align-items:stretch;}
+  .duration-control{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));}
+  .duration-control button{padding:0 4px;font-size:12px;min-width:0;}
+  .section-top{flex-wrap:wrap;}
+  .card-bottom{flex-direction:column;}
+  .today-card-body{padding:20px 16px 16px;}
+  .guidance-band{flex-direction:column;grid-template-columns:1fr;gap:12px;}
+  .guidance-band h2{font-size:22px;}
+  .detail-actions>*{flex:1 1 auto;}
+  .list-toolbar{flex-wrap:wrap;}
+  .mobile-nav a{padding-inline:0;min-width:0;}
+  .mobile-nav a>span:last-child{font-size:10px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .mobile-nav .nav-indicator{width:48px;}
+  .asah-dialog{padding:20px 16px;}
+  .response-options{flex-wrap:wrap;}
+}
+@media (max-width:360px){.child-trigger{display:flex;align-items:center;gap:4px;width:auto;}.child-trigger>svg{flex-shrink:0;}.child-meta{min-width:0;}}
