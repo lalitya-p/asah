@@ -5,8 +5,8 @@ import { emptyState, type AppState, type Child } from '@/lib/asah';
 type Store = { state: AppState; update: (fn: (s: AppState) => AppState) => void; ready: boolean; now: Date; online: boolean; child: Child | undefined };
 // Preserve context identity across Vite updates. Existing mounted providers and
 // newly refreshed consumers must reference the same context object.
-const Context: ReactContext<Store | null> = import.meta.hot?.data.asahContext ?? createContext<Store | null>(null);
-if (import.meta.hot) import.meta.hot.data.asahContext = Context;
+const Context: ReactContext<Store | null> = import.meta.hot?.data?.asahContext ?? createContext<Store | null>(null);
+if (import.meta.hot?.data) import.meta.hot.data.asahContext = Context;
 const KEY = 'asah-prototype-v1';
 export function AsahProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<AppState>(emptyState);
