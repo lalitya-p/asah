@@ -20,7 +20,7 @@ const copy = {
 };
 
 function Development() {
-  const { language: lang } = useLanguage();
+  const { language: lang, t } = useLanguage();
   const { child, state, now } = useAsah();
   const months = ageMonths(child?.dob ?? '', now);
   const moments = childMoments(state.logs, child?.id);
@@ -31,12 +31,21 @@ function Development() {
     {inRange ? <ActivityCarousel activities={activitiesForAge(months, state.inventory)} lang={lang} /> : <p className="dev-empty">{copy.over[lang]}</p>}
     <section className="dev-garden"><img src={gardenHasGrowth(moments.length) ? garden.url : gardenSeeds} alt="" /><div>{lang === 'en' ? `${moments.length} moment${moments.length === 1 ? "" : "s"} with ${name}` : `${moments.length} momen bersama ${name}`}</div></section>
     <section className="dev-areas"><h2>{copy.noticed[lang]}</h2>
-      {areaIds.map(id => { const inArea = momentsInArea(moments, id); const latest = inArea[0]; return (
+      {areaIds.map(id => {
+        const inArea = momentsInArea(moments, id);
+        const latest = inArea[0];
+        const latestTitle = latest ? getActivity(latest.activityId)?.title[lang] ?? t(latest.title) : '';
+        const latestNotice = latest
+          ? latest.noticed !== undefined
+            ? NOTICE_OPTIONS[latest.noticed]?.[lang] ?? ''
+            : latest.response ? t(latest.response) : ''
+          : '';
+        return (
         <div key={id} className="dev-area">
           <div className="dev-area-icon"><AreaIcon area={id} /></div>
           <div className="dev-area-body">
             <div className="dev-area-top"><span><b>{AREAS[id].label[lang]}</b><small>{AREAS[id].kiaTerm[lang]}</small></span><em>{inArea.length}</em></div>
-            <span className="dev-area-latest">{latest ? `${getActivity(latest.activityId)?.title[lang] ?? ''}: ${NOTICE_OPTIONS[latest.noticed ?? -1]?.[lang] ?? ''}` : copy.none[lang]}</span>
+            <span className="dev-area-latest">{latest ? `${latestTitle}${latestNotice ? `: ${latestNotice}` : ''}` : copy.none[lang]}</span>
           </div>
         </div>); })}
     </section>

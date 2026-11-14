@@ -1,4 +1,5 @@
 import type { HouseholdInventory } from '@/lib/asah';
+import type { AreaId } from '@/data/asahActivities';
 import { evaluateMaterials, type MaterialMetadata, type MaterialRequirement } from '@/lib/inventory';
 
 export type Stage = { id: number; label: string; name: string; focus: string[]; theory: string; theorySummary: string; tonight: string; watch: string };
@@ -9,7 +10,7 @@ export const stages: Stage[] = [
   { id: 4, label: '2–4 tahun', name: 'Imajinasi bertumbuh', focus: ['Bermain imajinatif', 'Interaksi sosial', 'Motorik halus'], theory: 'Piaget — Preoperasional; Montessori — Masa sensitif', theorySummary: 'Bermain pura-pura dan latihan mandiri membantu anak mengeksplorasi ide serta keterampilan baru.', tonight: 'Bermain pura-pura memasak atau bergiliran menyusun wadah besar.', watch: 'Perhatikan pilihan dan cara anak bermain; ini bukan daftar kemampuan yang harus dipenuhi.' },
   { id: 5, label: '4–5 tahun', name: 'Siap menemukan', focus: ['Kesiapan literasi', 'Pemecahan masalah', 'Regulasi emosi'], theory: 'Erikson — Inisiatif vs. Rasa Bersalah; Vygotsky — Dukungan bertahap (scaffolding)', theorySummary: 'Pilihan, cerita, dan bantuan secukupnya memberi anak ruang untuk berinisiatif.', tonight: 'Buat cerita dari gambar atau bicarakan perasaan tokoh dalam cerita.', watch: 'Dengarkan gagasan anak dan beri bantuan secukupnya. Tidak ada skor perkembangan.' },
 ];
-export type Activity = MaterialMetadata & { id: string; stage: number; title: string; subtitle: string; focus: string; aim: string; materials: string[]; steps: string[]; observe: string; safety: string; speech: string; smallItems: boolean; version: number };
+export type Activity = MaterialMetadata & { id: string; stage: number; title: string; subtitle: string; focus: string; areas: AreaId[]; aim: string; materials: string[]; steps: string[]; observe: string; safety: string; speech: string; smallItems: boolean; version: number };
 
 function metadataFor(materials: string[]): MaterialMetadata {
   const requiredMaterials: MaterialRequirement[] = materials.flatMap(label => {
@@ -35,8 +36,24 @@ const ideas: Record<number, [string, string, string, string[]][]> = {
   4: [ ['Menara kecil, ide besar','Susun, coba, dan temukan bersama','Motorik halus',['3–4 wadah plastik besar','Alas datar']], ['Dapur imajinasi','Hari ini, siapa kokinya?','Bermain imajinatif',['Mangkuk plastik besar','Sendok kayu besar']], ['Toko kecil di rumah','Bergantian jadi penjual dan pembeli','Interaksi sosial',['Wadah plastik besar','Kain besar']], ['Selimut jadi cerita','Petualangan dari barang sehari-hari','Bermain imajinatif',['Kain besar','Boneka besar']], ['Giliranku, giliranmu','Bangun sesuatu bersama','Interaksi sosial',['Wadah plastik besar']], ['Lipatan kain','Coba lipat dengan caramu','Motorik halus',['Kain besar yang bersih']], ['Jadi hewan kesukaan','Tebak gerakan dan suaranya bersama','Bermain imajinatif',['Tubuh dan suara Anda']] ],
   5: [ ['Cerita dari gambar','Satu gambar, banyak kemungkinan','Kesiapan literasi',['Buku bergambar']], ['Jembatan wadah','Temukan susunan yang berbeda','Pemecahan masalah',['Wadah plastik besar']], ['Perasaan tokoh','Dengarkan cerita dan perasaan','Regulasi emosi',['Buku bergambar']], ['Akhir cerita versimu','Apa yang terjadi selanjutnya?','Kesiapan literasi',['Buku bergambar']], ['Urutkan yang besar','Coba, bandingkan, susun ulang','Pemecahan masalah',['Wadah plastik berbagai ukuran']], ['Jeda dan bernapas','Momen tenang bersama','Regulasi emosi',['Tempat duduk yang nyaman']] ],
 };
+// Development areas are content metadata, never inferred from a child's answer.
+// Keeping them with the daily catalog lets Today, History and Development share
+// the same completion records and language-independent area IDs.
+const activityAreas: Record<string, AreaId[]> = {
+  's1-0': ['others', 'talking'], 's1-1': ['talking', 'others'], 's1-2': ['moving'],
+  's1-3': ['talking', 'others'], 's1-4': ['talking', 'others'], 's1-5': ['others', 'talking'],
+  's2-0': ['others', 'talking'], 's2-1': ['hands', 'moving'], 's2-2': ['hands', 'others'],
+  's2-3': ['talking', 'others'], 's2-4': ['moving'], 's2-5': ['talking', 'others'],
+  's3-0': ['talking', 'hands'], 's3-1': ['moving'], 's3-2': ['talking', 'others'],
+  's3-3': ['hands', 'talking'], 's3-4': ['talking', 'others'], 's3-5': ['others', 'talking'],
+  's4-0': ['hands'], 's4-1': ['others', 'hands', 'talking'], 's4-2': ['others', 'talking', 'hands'],
+  's4-3': ['others', 'talking', 'hands'], 's4-4': ['others', 'hands'], 's4-5': ['hands', 'others'],
+  's4-6': ['hands'], 's4-7': ['moving', 'others', 'talking'],
+  's5-0': ['talking', 'others'], 's5-1': ['hands'], 's5-2': ['talking', 'others'],
+  's5-3': ['talking', 'others'], 's5-4': ['hands'], 's5-5': ['others'],
+};
 export const activities: Activity[] = stages.flatMap(stage => (ideas[stage.id] ?? []).map(([title, subtitle, focus, materials], index) => ({
-  id: `s${stage.id}-${index}`, stage: stage.id, title, subtitle, focus, materials, ...metadataFor(materials),
+  id: `s${stage.id}-${index}`, stage: stage.id, title, subtitle, focus, areas: activityAreas[`s${stage.id}-${index}`] ?? [], materials, ...metadataFor(materials),
   aim: `Memberi kesempatan anak mengeksplorasi ${focus.toLocaleLowerCase('id-ID')} melalui bermain bersama, tanpa target hasil.`,
   steps: stage.id === 1 ? ['Pastikan bayi nyaman, terjaga, dan berada di posisi aman bersama Anda.', 'Tunjukkan wajah atau kain besar dari jarak nyaman. Bicara atau bernyanyi perlahan.', 'Beri jeda untuk respons bayi. Akhiri saat bayi tampak lelah atau tidak nyaman.'] : stage.id === 2 ? ['Duduk bersama anak di alas datar dan aman. Siapkan bahan di dekat Anda.', 'Tunjukkan benda atau gerakan perlahan sambil menyebut namanya. Jangan menutup wajah anak.', 'Ikuti perhatian anak, beri jeda, dan hentikan saat anak tidak nyaman.'] : ['Siapkan bahan di alas datar. Duduk dekat anak dan beri contoh singkat.', `Ajak anak mencoba ${title.toLocaleLowerCase('id-ID')}. Biarkan anak memilih cara bermainnya.`, 'Bergiliran, sebutkan apa yang sedang dilakukan, dan sambut setiap usaha anak.'],
   observe: 'Apa yang menarik perhatian anak? Perhatikan usaha, pilihan, dan responsnya—tidak perlu menguji.',
