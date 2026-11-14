@@ -22,11 +22,11 @@ export type Text = Record<Lang, string>;
 export type AreaId = "moving" | "hands" | "talking" | "others";
 
 // Everyday name first; the Buku KIA term is shown small underneath.
-export const AREAS: Record<AreaId, { label: Text; kiaTerm: string }> = {
-  moving: { label: { id: "Bergerak", en: "Moving" }, kiaTerm: "gerak kasar", },
-  hands: { label: { id: "Pakai tangan", en: "Using hands" }, kiaTerm: "gerak halus", },
-  talking: { label: { id: "Bicara", en: "Talking" }, kiaTerm: "bicara & bahasa", },
-  others: { label: { id: "Bersama orang lain", en: "With others" }, kiaTerm: "sosialisasi", },
+export const AREAS: Record<AreaId, { label: Text; kiaTerm: Text }> = {
+  moving: { label: { id: "Bergerak", en: "Moving" }, kiaTerm: { id: "gerak kasar", en: "gross motor skills" }, },
+  hands: { label: { id: "Pakai tangan", en: "Using hands" }, kiaTerm: { id: "gerak halus", en: "fine motor skills" }, },
+  talking: { label: { id: "Bicara", en: "Talking" }, kiaTerm: { id: "bicara & bahasa", en: "speech & language" }, },
+  others: { label: { id: "Bersama orang lain", en: "With others" }, kiaTerm: { id: "sosialisasi", en: "socialisation" }, },
 };
 
 // Buku KIA age groups, in months. Only the child's current group is shown in the UI.

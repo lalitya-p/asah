@@ -36,7 +36,7 @@ function Development() {
         <div key={id} className="dev-area">
           <div className="dev-area-icon"><AreaIcon area={id} /></div>
           <div className="dev-area-body">
-            <div className="dev-area-top"><span><b>{AREAS[id].label[lang]}</b><small>{AREAS[id].kiaTerm}</small></span><em>{inArea.length}</em></div>
+            <div className="dev-area-top"><span><b>{AREAS[id].label[lang]}</b><small>{AREAS[id].kiaTerm[lang]}</small></span><em>{inArea.length}</em></div>
             <span className="dev-area-latest">{latest ? `${getActivity(latest.activityId)?.title[lang] ?? ''}: ${NOTICE_OPTIONS[latest.noticed ?? -1]?.[lang] ?? ''}` : copy.none[lang]}</span>
           </div>
         </div>); })}
