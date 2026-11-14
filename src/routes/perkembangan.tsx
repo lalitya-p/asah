@@ -1,11 +1,46 @@
-import { useLanguage } from '@/components/asah/language';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { Sprout, ArrowRight, BookOpen, Heart } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
-import { PageHeading, ReviewNote, StartGate } from '@/components/asah/shared';
-import { ageMonths, stageFor } from '@/lib/asah';
-import { stages } from '@/lib/catalog';
+import { StartGate } from '@/components/asah/shared';
+import { ActivityCarousel } from '@/components/asah/ActivityCarousel';
+import { AreaIcon } from '@/components/asah/area-icon';
+import { AREAS, NOTICE_OPTIONS, getActivity } from '@/data/asahActivities';
+import { activitiesForAge, ageGroupLabel, areaIds, childMoments, momentsInArea } from '@/lib/moments';
+import { ageMonths } from '@/lib/asah';
 import { pageHead } from '@/lib/page-head';
-export const Route = createFileRoute('/perkembangan')({ head: () => pageHead('Perkembangan', 'Panduan kelompok usia dan pengamatan bermain, tanpa penilaian atau diagnosis.'), component: Development });
-function Development() { const { t, locale } = useLanguage(); const { child, state, now } = useAsah(); const stage = stages.find(s => s.id === stageFor(ageMonths(child?.dob ?? '', now))); const logs = state.logs.filter(l => l.childId === child?.id); return <StartGate><PageHeading eyebrow={t("TUMBUH DENGAN CARANYA")} title={t("Kenali, bukan bandingkan.")}>{t("Ruang untuk memahami tahap bermain ")}{child?.name}{t(".")}</PageHeading>{stage ? <><section className="guidance-band"><div className="growth-icon"><Sprout /></div><div><span className="eyebrow">{t("TAHAP ")}{stage.id}{t(" \u00B7 ")}{t(stage.label)}</span><h2>{t(stage.name)}</h2><p>{t("Fokus bermain: ")}{t(stage.focus.join(', ').toLocaleLowerCase('id-ID'))}{t(".")}</p><p className="theory"><BookOpen size={17}/>{t(stage.theory)}</p><ReviewNote /></div></section><div className="guidance-columns"><section><h3>{t("Coba malam ini")}</h3><p>{t(stage.tonight)}</p></section><section><h3>{t("Yang bisa diperhatikan")}</h3><p>{t(stage.watch)}</p></section></div><h2 className="section-title">{t("Pengamatan selama bermain")}</h2><p className="text-muted-foreground mb-5">{t("Respons mencatat satu momen, bukan mengukur kemampuan atau menentukan apakah perkembangan sesuai usia.")}</p><div className="focus-grid">{stage.focus.map(f => { const entries = logs.filter(l => l.focus === f); return <article className="focus-card" key={f}><Sprout /><h3>{t(f)}</h3><p>{t(entries.length ? `${entries.length} kesempatan bermain tercatat` : 'Belum ada pengamatan')}</p>{entries.length > 0 && <div className="focus-responses">{(['Ya', 'Sedikit', 'Belum'] as const).map(r => <span key={r}>{t(r)}{t(": ")}{entries.filter(l => l.response === r).length}</span>)}</div>}</article>; })}</div></> : <div className="empty-state"><Sprout /><h2>{t("Panduan tersedia untuk usia di bawah 6 tahun.")}</h2><p>{t("Riwayat pengamatan tetap dapat dibuka.")}</p></div>}<section className="concern-preview"><Heart /><div><span className="eyebrow">{t("CONTOH SKENARIO \u00B7 BUKAN PENILAIAN")}</span><h3>{t("Saat Anda ingin bertanya pada tenaga kesehatan")}</h3><p>{t("Lihat contoh alur dukungan. Tidak dipicu oleh catatan atau respons anak.")}</p><Button variant="link" asChild><Link to="/dukungan">{t("Buka contoh alur ")}<ArrowRight /></Link></Button></div></section><Button variant="link" asChild><Link to="/transparansi">{t("Tentang kerangka & batas panduan ")}<ArrowRight /></Link></Button></StartGate>; }
+import garden from '@/assets/asah/garden.svg.asset.json';
+
+export const Route = createFileRoute('/perkembangan')({ head: () => pageHead('Perkembangan', 'Ide main sesuai kelompok usia Buku KIA dan momen yang kamu perhatikan, tanpa penilaian.'), component: Development });
+
+const copy = {
+  tagline: { id: 'Pahami, jangan bandingkan.', en: "Understand, don't compare." },
+  noticed: { id: 'Yang kamu perhatikan', en: "What you've noticed" },
+  none: { id: 'Belum ada momen', en: 'No moments yet' },
+  help: { id: 'Ada pertanyaan soal pertumbuhan, berat badan atau imunisasi? Cek Buku KIA, tanya Posyandu atau bidan', en: 'Questions about growth, weight or immunisation? Check your Buku KIA, ask your Posyandu or bidan' },
+  over: { id: 'Ide main tersedia untuk anak di bawah 6 tahun.', en: 'Play ideas are available for children under 6.' },
+};
+
+function Development() {
+  const { language: lang } = useLanguage();
+  const { child, state, now } = useAsah();
+  const months = ageMonths(child?.dob ?? '', now);
+  const moments = childMoments(state.logs, child?.id);
+  const name = child?.name ?? '';
+  const inRange = months >= 0 && months < 72;
+  return <StartGate><div className="dev-page">
+    <header className="dev-head"><h1>{name}{inRange && <> · {ageGroupLabel(months, lang)}</>}</h1><p>{copy.tagline[lang]}</p></header>
+    {inRange ? <ActivityCarousel activities={activitiesForAge(months)} lang={lang} /> : <p className="dev-empty">{copy.over[lang]}</p>}
+    <section className="dev-garden"><img src={garden.url} alt="" /><div>{lang === 'en' ? `${moments.length} moment${moments.length === 1 ? "" : "s"} with ${name}` : `${moments.length} momen bersama ${name}`}</div></section>
+    <section className="dev-areas"><h2>{copy.noticed[lang]}</h2>
+      {areaIds.map(id => { const inArea = momentsInArea(moments, id); const latest = inArea[0]; return (
+        <div key={id} className="dev-area">
+          <div className="dev-area-icon"><AreaIcon area={id} /></div>
+          <div className="dev-area-body">
+            <div className="dev-area-top"><span><b>{AREAS[id].label[lang]}</b><small>{AREAS[id].kiaTerm}</small></span><em>{inArea.length}</em></div>
+            <span className="dev-area-latest">{latest ? `${getActivity(latest.activityId)?.title[lang] ?? ''}: ${NOTICE_OPTIONS[latest.noticed ?? -1]?.[lang] ?? ''}` : copy.none[lang]}</span>
+          </div>
+        </div>); })}
+    </section>
+    <Link to="/dukungan" className="dev-help">{copy.help[lang]} <span aria-hidden>›</span></Link>
+  </div></StartGate>;
+}

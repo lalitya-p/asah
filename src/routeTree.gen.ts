@@ -16,6 +16,8 @@ import { Route as PerkembanganRouteImport } from './routes/perkembangan'
 import { Route as RiwayatRouteImport } from './routes/riwayat'
 import { Route as TersimpanRouteImport } from './routes/tersimpan'
 import { Route as TransparansiRouteImport } from './routes/transparansi'
+import { Route as AktivitasIdIndexRouteImport } from './routes/aktivitas.$id.index'
+import { Route as AktivitasIdCatatRouteImport } from './routes/aktivitas.$id.catat'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +54,16 @@ const TransparansiRoute = TransparansiRouteImport.update({
   path: '/transparansi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AktivitasIdIndexRoute = AktivitasIdIndexRouteImport.update({
+  id: '/aktivitas/$id/',
+  path: '/aktivitas/$id/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AktivitasIdCatatRoute = AktivitasIdCatatRouteImport.update({
+  id: '/aktivitas/$id/catat',
+  path: '/aktivitas/$id/catat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +73,8 @@ export interface FileRoutesByFullPath {
   '/riwayat': typeof RiwayatRoute
   '/tersimpan': typeof TersimpanRoute
   '/transparansi': typeof TransparansiRoute
+  '/aktivitas/$id/catat': typeof AktivitasIdCatatRoute
+  '/aktivitas/$id/': typeof AktivitasIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +84,8 @@ export interface FileRoutesByTo {
   '/riwayat': typeof RiwayatRoute
   '/tersimpan': typeof TersimpanRoute
   '/transparansi': typeof TransparansiRoute
+  '/aktivitas/$id/catat': typeof AktivitasIdCatatRoute
+  '/aktivitas/$id': typeof AktivitasIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +96,8 @@ export interface FileRoutesById {
   '/riwayat': typeof RiwayatRoute
   '/tersimpan': typeof TersimpanRoute
   '/transparansi': typeof TransparansiRoute
+  '/aktivitas/$id/catat': typeof AktivitasIdCatatRoute
+  '/aktivitas/$id/': typeof AktivitasIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +109,8 @@ export interface FileRouteTypes {
     | '/riwayat'
     | '/tersimpan'
     | '/transparansi'
+    | '/aktivitas/$id/catat'
+    | '/aktivitas/$id/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +120,8 @@ export interface FileRouteTypes {
     | '/riwayat'
     | '/tersimpan'
     | '/transparansi'
+    | '/aktivitas/$id/catat'
+    | '/aktivitas/$id'
   id:
     | '__root__'
     | '/'
@@ -109,6 +131,8 @@ export interface FileRouteTypes {
     | '/riwayat'
     | '/tersimpan'
     | '/transparansi'
+    | '/aktivitas/$id/catat'
+    | '/aktivitas/$id/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +143,8 @@ export interface RootRouteChildren {
   RiwayatRoute: typeof RiwayatRoute
   TersimpanRoute: typeof TersimpanRoute
   TransparansiRoute: typeof TransparansiRoute
+  AktivitasIdCatatRoute: typeof AktivitasIdCatatRoute
+  AktivitasIdIndexRoute: typeof AktivitasIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +198,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TransparansiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aktivitas/$id/': {
+      id: '/aktivitas/$id/'
+      path: '/aktivitas/$id'
+      fullPath: '/aktivitas/$id/'
+      preLoaderRoute: typeof AktivitasIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aktivitas/$id/catat': {
+      id: '/aktivitas/$id/catat'
+      path: '/aktivitas/$id/catat'
+      fullPath: '/aktivitas/$id/catat'
+      preLoaderRoute: typeof AktivitasIdCatatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +223,8 @@ const rootRouteChildren: RootRouteChildren = {
   RiwayatRoute: RiwayatRoute,
   TersimpanRoute: TersimpanRoute,
   TransparansiRoute: TransparansiRoute,
+  AktivitasIdCatatRoute: AktivitasIdCatatRoute,
+  AktivitasIdIndexRoute: AktivitasIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
