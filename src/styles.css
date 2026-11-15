@@ -448,7 +448,7 @@ button,a,select,input { -webkit-tap-highlight-color: transparent; }
 .dev-detail-head{display:flex;flex-direction:column;gap:8px;}
 .dev-steps{display:flex;flex-direction:column;gap:10px;}
 .dev-step{display:flex;align-items:center;gap:14px;border-radius:18px;padding:10px 14px 10px 10px;}
-.dev-step img{width:100px;height:92px;flex-shrink:0;}
+.dev-step img{width:100px;height:92px;flex-shrink:0;object-fit:contain;}
 .dev-step-num{width:56px;height:56px;flex-shrink:0;display:grid;place-items:center;border-radius:16px;background:var(--card);font-size:24px;font-weight:700;}
 .dev-step b{font-size:15px;}.dev-step p{font-size:14px;line-height:1.6;margin-top:2px;}
 .dev-safety{border:1px solid var(--destructive);border-radius:16px;padding:14px;font-size:14px;line-height:1.6;background:var(--card);color:var(--destructive);}
