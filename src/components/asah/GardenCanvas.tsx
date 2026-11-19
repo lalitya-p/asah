@@ -33,7 +33,7 @@ function Leaf({ x, y, r = 0, s = 1 }: { x: number; y: number; r?: number; s?: nu
 }
 
 function Plant({ area, stage }: { area: AreaId; stage: 1 | 2 | 3 }) {
-  const h = [0, 22, 50, 78][stage];
+  const h = stage === 3 ? 78 : stage === 2 ? 50 : 22;
   if (area === 'moving') {
     return <g>
       {Array.from({ length: stage + 1 }, (_, i) => <rect key={i} x="-4" y={-((i + 1) * h) / (stage + 1)} width="8" height={h / (stage + 1) - 2} rx="2" fill="var(--garden-stem)" />)}
@@ -50,7 +50,7 @@ function Plant({ area, stage }: { area: AreaId; stage: 1 | 2 | 3 }) {
     </g>;
   }
   if (area === 'others') {
-    const c = [0, 10, 20, 30][stage];
+    const c = stage * 10;
     return <g>
       <rect x="-3" y={-h + c / 2} width="6" height={h - c / 2} rx="2" fill="var(--garden-trunk)" />
       <circle cx="0" cy={-h} r={c} fill="var(--garden-leaf)" />
