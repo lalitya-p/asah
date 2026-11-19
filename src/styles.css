@@ -576,3 +576,10 @@ button,a,select,input { -webkit-tap-highlight-color: transparent; }
 .onboarding-progress>span{display:block;height:100%;background:var(--primary);border-radius:999px;}
 @media(max-width:600px){.bare-content{padding:22px 18px 32px;}.welcome-hero h1,.reconcile h1,.setup-child h1{font-size:26px;}.welcome-points{grid-template-columns:1fr;}.welcome-card{padding:20px 16px;border-radius:20px;}}
 @media(max-width:360px){.bare-top{padding:14px;}.bare-content{padding:18px 14px 28px;}.welcome-card{padding:18px 14px;}.reconcile-card{padding:4px 12px;}.reconcile-row{flex-direction:column;gap:3px;}.reconcile-row strong{text-align:left;}}
+:root{--garden-sky:oklch(0.96 0.03 210);--garden-sun:oklch(0.86 0.15 85);--garden-soil:oklch(0.62 0.09 50);--garden-mound:oklch(0.52 0.08 45);--garden-seed:oklch(0.4 0.05 50);--garden-stem:oklch(0.62 0.13 140);--garden-leaf:oklch(0.7 0.15 140);--garden-leaf-deep:oklch(0.58 0.13 150);--garden-trunk:oklch(0.48 0.07 55);--garden-bud:oklch(0.8 0.1 10);--garden-petal:oklch(0.98 0.01 90);}
+.garden-canvas{display:block;width:100%;height:auto;}
+.garden-label{font-size:9px;font-weight:600;fill:var(--foreground);}
+.garden-grow>g{transform-box:fill-box;transform-origin:50% 100%;animation:garden-grow 1.1s cubic-bezier(.3,1.4,.5,1) both;}
+@keyframes garden-grow{from{transform:scale(.4);opacity:.3}to{transform:scale(1);opacity:1}}
+@media(prefers-reduced-motion:reduce){.garden-grow>g{animation:none}}
+.dev-done .dev-garden{margin:6px 0;}

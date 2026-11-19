@@ -60,3 +60,11 @@ describe('development moments', () => {
     expect(answered[0]?.areas).toEqual(['hands']);
   });
 });
+
+import { plantStage } from '@/lib/moments';
+describe('garden plant stages', () => {
+  it('is a seed with no moments', () => { expect(plantStage(0)).toBe(0); });
+  it('sprouts after 1 moment', () => { expect(plantStage(1)).toBe(1); expect(plantStage(2)).toBe(1); });
+  it('is leafy from 3 moments', () => { expect(plantStage(3)).toBe(2); expect(plantStage(5)).toBe(2); });
+  it('blooms from 6 moments', () => { expect(plantStage(6)).toBe(3); expect(plantStage(40)).toBe(3); });
+});

@@ -2,9 +2,11 @@ import { createFileRoute, Link } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
-import { AREAS, NOTICE_OPTIONS, getActivity } from '@/data/asahActivities';
+import { AREAS, NOTICE_OPTIONS, getActivity, type AreaId } from '@/data/asahActivities';
 import { addCompletion, ageMonths, stageFor } from '@/lib/asah';
 import { pageHead } from '@/lib/page-head';
+import { GardenCanvas } from '@/components/asah/GardenCanvas';
+import { areaIds, childMoments, momentsInArea } from '@/lib/moments';
 
 export const Route = createFileRoute('/aktivitas/$id/catat')({ head: () => pageHead('Catat momen', 'Catat apa yang kamu perhatikan saat bermain. Tidak ada jawaban yang salah.'), component: LogMoment });
 
@@ -23,7 +25,7 @@ const copy = {
 function LogMoment() {
   const { id } = Route.useParams();
   const { language: lang } = useLanguage();
-  const { child, update, now } = useAsah();
+  const { child, update, now, state } = useAsah();
   const a = getActivity(id);
   const [choice, setChoice] = useState<number | null>(null);
   const [note, setNote] = useState('');
@@ -46,8 +48,13 @@ function LogMoment() {
     </> : <div className="dev-done">
       <div className="dev-kicker">{copy.saved[lang]}</div>
       <h1>{copy.youNoticed[lang]} {NOTICE_OPTIONS[choice ?? 0]?.[lang].toLowerCase()}</h1>
+      <section className="dev-garden" aria-live="polite">
+        <GardenCanvas counts={Object.fromEntries(areaIds.map(x => [x, momentsInArea(childMoments(state.logs, child?.id), x).length])) as Record<AreaId, number>} labels={Object.fromEntries(areaIds.map(x => [x, AREAS[x].label[lang]])) as Record<AreaId, string>} highlight={a.areas} />
+        <div>{lang === 'en' ? `${child?.name ?? ''}'s garden grew: ${areaNames}` : `Taman ${child?.name ?? ''} bertumbuh: ${areaNames}`}</div>
+      </section>
       <p>{a.why[lang]} {copy.present[lang]}</p>
-      <Link to="/" className="dev-primary">{copy.backToday[lang]}</Link>
+      <Link to="/perkembangan" className="dev-primary">{lang === 'en' ? `See ${child?.name ?? ''}'s garden` : `Lihat taman ${child?.name ?? ''}`}</Link>
+      <Link to="/" className="dev-link">{copy.backToday[lang]}</Link>
       <button type="button" className="dev-link" onClick={() => { setChoice(null); setNote(''); setSaved(false); }}>{copy.another[lang]}</button>
     </div>}
   </div>;

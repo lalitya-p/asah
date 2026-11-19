@@ -33,3 +33,11 @@ export function momentsInArea(moments: Completion[], area: AreaId) {
 export function gardenHasGrowth(momentCount: number) {
   return momentCount > 0;
 }
+
+/** Garden plant stage per development area: 0 seed, 1 sprout (1–2), 2 leafy (3–5), 3 bloom (6+). Growth never goes backwards. */
+export function plantStage(count: number): 0 | 1 | 2 | 3 {
+  if (count >= 6) return 3;
+  if (count >= 3) return 2;
+  if (count >= 1) return 1;
+  return 0;
+}
