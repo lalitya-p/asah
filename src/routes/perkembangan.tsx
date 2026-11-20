@@ -14,6 +14,10 @@ const copy = {
   tagline: { id: 'Pahami, jangan bandingkan.', en: "Understand, don't compare." },
   noticed: { id: 'Yang kamu perhatikan', en: "What you've noticed" },
   none: { id: 'Belum ada momen', en: 'No moments yet' },
+  gardenIntro: {
+    id: 'Setiap aktivitas yang selesai menyiram satu tanaman. Semakin sering bermain, semakin tumbuh taman ini — gambaran keterampilan yang sedang dilatih.',
+    en: 'Every finished activity waters a plant. The more you play, the more this garden grows — a picture of the skills being practiced.',
+  },
 };
 
 function Development() {
@@ -25,7 +29,7 @@ function Development() {
   const inRange = months >= 0 && months < 72;
   return <div className="dev-page">
     <header className="dev-head"><h1>{name}{inRange && <> · {ageGroupLabel(months, lang)}</>}</h1><p>{copy.tagline[lang]}</p></header>
-    <section className="dev-garden"><GardenCanvas counts={Object.fromEntries(areaIds.map(a => [a, momentsInArea(moments, a).length])) as Record<AreaId, number>} labels={Object.fromEntries(areaIds.map(a => [a, AREAS[a].label[lang]])) as Record<AreaId, string>} onSelect={a => document.getElementById(`area-${a}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })} /><div>{lang === 'en' ? `${moments.length} moment${moments.length === 1 ? "" : "s"} with ${name}` : `${moments.length} momen bersama ${name}`}</div></section>
+    <section className="dev-garden"><p className="dev-garden-intro">{copy.gardenIntro[lang]}</p><GardenCanvas counts={Object.fromEntries(areaIds.map(a => [a, momentsInArea(moments, a).length])) as Record<AreaId, number>} labels={Object.fromEntries(areaIds.map(a => [a, AREAS[a].label[lang]])) as Record<AreaId, string>} onSelect={a => document.getElementById(`area-${a}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })} /><div>{lang === 'en' ? `${moments.length} moment${moments.length === 1 ? "" : "s"} with ${name}` : `${moments.length} momen bersama ${name}`}</div></section>
     <section className="dev-areas"><h2>{copy.noticed[lang]}</h2>
       {areaIds.map(id => {
         const inArea = momentsInArea(moments, id);
