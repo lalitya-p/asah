@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ArrowRight, Check, Heart, ShieldCheck, Sprout } from 'lucide-react';
+import { ArrowRight, Heart, Sprout } from 'lucide-react';
+import { AreaIcon } from '@/components/asah/area-icon';
+import { AREAS } from '@/data/asahActivities';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
@@ -7,7 +9,7 @@ import { ActivityCarousel } from '@/components/asah/ActivityCarousel';
 import { PageHeading } from '@/components/asah/shared';
 import { ageMonths, currentDay, stageFor } from '@/lib/asah';
 import { stages } from '@/lib/catalog';
-import { activitiesForAge } from '@/lib/moments';
+import { activitiesForAge, childMoments } from '@/lib/moments';
 import { pageHead } from '@/lib/page-head';
 
 export const Route = createFileRoute('/')({
@@ -28,7 +30,7 @@ function Today() {
   const stage = stageFor(months);
   const day = currentDay(state.days[child.id], now);
   const framework = stages.find(s => s.id === stage);
-  const logs = state.logs.filter(l => l.childId === child.id);
+  const logs = childMoments(state.logs, child.id).sort((a, b) => b.at.localeCompare(a.at));
   const todayLogs = logs.filter(l => currentDay(undefined, new Date(l.at)).day === day.day);
   const inRange = months >= 0 && months < 72;
 
@@ -67,9 +69,23 @@ function Today() {
         <section className="moments-preview">
           <div className="section-top"><h3>{t('Momen yang tercatat')}</h3><Heart size={17} /></div>
           {logs.length ? <>
-            <strong className="moment-count">{todayLogs.length}</strong>
-            <p>{t('momen bermain hari ini')}</p>
-            <div className="recent-moment"><Check size={16} /><span>{t(logs[0]?.title ?? '')}</span></div>
+            <div className="moments-summary">
+              <span><strong>{todayLogs.length}</strong>{t('hari ini')}</span>
+              <span><strong>{logs.length}</strong>{t('semua momen')}</span>
+            </div>
+            <ul className="moment-list">{logs.slice(0, 3).map(log => {
+              const area = log.areas?.[0] as keyof typeof AREAS | undefined;
+              return <li key={log.id} className="moment-card">
+                {area && <AreaIcon area={area} />}
+                <div className="moment-card-body">
+                  <strong>{t(log.title)}</strong>
+                  <div className="moment-card-meta">
+                    <time dateTime={log.at}>{momentDate(log.at, now, locale, t)}</time>
+                    {log.areas?.map(a => <span key={a} className="area-chip">{AREAS[a as keyof typeof AREAS]?.label[language === 'en' ? 'en' : 'id']}</span>)}
+                  </div>
+                </div>
+              </li>;
+            })}</ul>
           </> : <>
             <div className="empty-moment"><Heart /></div>
             <p>{t('Setiap usaha kecil layak dikenang.')}</p>
@@ -77,8 +93,15 @@ function Today() {
           </>}
           <Button variant="link" asChild><Link to="/riwayat">{t('Lihat riwayat ')}<ArrowRight /></Link></Button>
         </section>
-        <div className="trust-line"><ShieldCheck size={18} /><p>{t('Tanpa skor. Tanpa perbandingan.')}<br />{t('Hanya ruang untuk bertumbuh.')}</p></div>
       </aside>
     </div>
   </>;
+}
+
+function momentDate(at: string, now: Date, locale: string, t: (s: string) => string) {
+  const day = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(d);
+  const today = day(now), then = day(new Date(at)), yesterday = day(new Date(now.getTime() - 86400000));
+  if (then === today) return t('Hari ini');
+  if (then === yesterday) return t('Kemarin');
+  return new Intl.DateTimeFormat(locale, { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'short' }).format(new Date(at));
 }
