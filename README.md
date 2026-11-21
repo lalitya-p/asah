@@ -26,13 +26,25 @@ Asah is a bilingual (Bahasa Indonesia / English) early-childhood play companion 
 
 TanStack Start (React 19), TypeScript, Vite, Tailwind CSS v4, Vitest.
 
-## Prerequisites
+## How to run it
+
+**Just open the link — nothing to install or configure:**
+
+https://playwithasah.lovable.app
+
+All family data is stored in the browser on your own device, so there are no accounts, credentials or environment variables to set up. The same layout appears on every screen size.
+
+## Run it from source (optional)
+
+Only needed if you want to change the code or host your own copy.
+
+### Prerequisites
 
 - Node.js 20 or newer
 - npm (or bun / pnpm)
 - Git
 
-## Setup and run locally
+### Setup and run locally
 
 ```sh
 git clone <your-repository-url>
@@ -50,9 +62,9 @@ npm run preview    # preview the production build
 npm run lint       # lint the code
 ```
 
-## Environment variables
+### Environment variables
 
-The app currently needs **no environment variables or credentials** — all family data is stored locally in the browser. Reviewers can run it as-is.
+None are required — the app runs as-is with no keys or services.
 
 If you deploy your own copy or add optional services later, create a `.env` file in the project root using placeholder values like these:
 
