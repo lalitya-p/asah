@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ArrowRight, Heart, Sprout } from 'lucide-react';
+import { ArrowRight, Check, Heart, Sprout } from 'lucide-react';
 import { AreaIcon } from '@/components/asah/area-icon';
 import { AREAS } from '@/data/asahActivities';
 import { Button } from '@/components/ui/button';
@@ -33,6 +33,7 @@ function Today() {
   const logs = childMoments(state.logs, child.id).sort((a, b) => b.at.localeCompare(a.at));
   const todayLogs = logs.filter(l => currentDay(undefined, new Date(l.at)).day === day.day);
   const inRange = months >= 0 && months < 72;
+  const en = language === 'en';
 
   return <>
     <PageHeading eyebrow={t('SEDIKIT WAKTU, BANYAK MAKNA')} title={t(`Hari ini, bersama ${child.name}.`)}>
@@ -67,41 +68,29 @@ function Today() {
           <p className="tiny-note">{t('Kerangka usia, bukan penilaian perkembangan.')}</p>
         </section>
         <section className="moments-preview">
-          <div className="section-top"><h3>{t('Momen yang tercatat')}</h3><Heart size={17} /></div>
-          {logs.length ? <>
-            <div className="moments-summary">
-              <span><strong>{todayLogs.length}</strong>{t('hari ini')}</span>
-              <span><strong>{logs.length}</strong>{t('semua momen')}</span>
-            </div>
-            <ul className="moment-list">{logs.slice(0, 3).map(log => {
+          <div className="section-top"><h3>{en ? 'TODAY\u2019S PLAY' : 'BERMAIN HARI INI'}</h3>{todayLogs.length ? <Check size={17} /> : <Heart size={17} />}</div>
+          {todayLogs.length ? <>
+            <ul className="moment-list">{todayLogs.map(log => {
               const area = log.areas?.[0] as keyof typeof AREAS | undefined;
               return <li key={log.id} className="moment-card">
                 {area && <AreaIcon area={area} />}
                 <div className="moment-card-body">
                   <strong>{t(log.title)}</strong>
                   <div className="moment-card-meta">
-                    <time dateTime={log.at}>{momentDate(log.at, now, locale, t)}</time>
-                    {log.areas?.map(a => <span key={a} className="area-chip">{AREAS[a as keyof typeof AREAS]?.label[language === 'en' ? 'en' : 'id']}</span>)}
+                    <time dateTime={log.at}>{t('Hari ini')}</time>
+                    {log.areas?.map(a => <span key={a} className="area-chip">{AREAS[a as keyof typeof AREAS]?.label[en ? 'en' : 'id']}</span>)}
                   </div>
                 </div>
               </li>;
             })}</ul>
+            <p className="today-play-note">{en ? `A warm moment was made with ${child.name} today.` : `Satu momen hangat sudah tercipta untuk ${child.name} hari ini.`}</p>
           </> : <>
-            <div className="empty-moment"><Heart /></div>
-            <p>{t('Setiap usaha kecil layak dikenang.')}</p>
-            <span className="tiny-note">{t('Catatan pertama akan muncul setelah bermain.')}</span>
+            <strong className="today-play-empty">{en ? 'Nothing logged today yet' : 'Belum ada catatan hari ini'}</strong>
+            <p>{en ? `No rush. Five relaxed minutes of play already means a lot to ${child.name}.` : `Tidak perlu buru-buru. 5 menit bermain santai sudah sangat berarti bagi ${child.name}.`}</p>
           </>}
-          <Button variant="link" asChild><Link to="/riwayat">{t('Lihat riwayat ')}<ArrowRight /></Link></Button>
+          <Button variant="link" asChild><Link to="/riwayat">{en ? 'See full history' : 'Lihat riwayat lengkap'}<ArrowRight /></Link></Button>
         </section>
       </aside>
     </div>
   </>;
-}
-
-function momentDate(at: string, now: Date, locale: string, t: (s: string) => string) {
-  const day = (d: Date) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(d);
-  const today = day(now), then = day(new Date(at)), yesterday = day(new Date(now.getTime() - 86400000));
-  if (then === today) return t('Hari ini');
-  if (then === yesterday) return t('Kemarin');
-  return new Intl.DateTimeFormat(locale, { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'short' }).format(new Date(at));
 }
