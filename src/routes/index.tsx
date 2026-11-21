@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ArrowRight, Check, Heart, Sprout } from 'lucide-react';
 import { AreaIcon } from '@/components/asah/area-icon';
-import { AREAS } from '@/data/asahActivities';
+import { AREAS, ACTIVITIES } from '@/data/asahActivities';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
@@ -72,10 +72,11 @@ function Today() {
           {todayLogs.length ? <>
             <ul className="moment-list">{todayLogs.map(log => {
               const area = log.areas?.[0] as keyof typeof AREAS | undefined;
+              const activity = ACTIVITIES.find(a => a.id === log.activityId);
               return <li key={log.id} className="moment-card">
                 {area && <AreaIcon area={area} />}
                 <div className="moment-card-body">
-                  <strong>{t(log.title)}</strong>
+                  <strong>{activity ? activity.title[en ? 'en' : 'id'] : t(log.title)}</strong>
                   <div className="moment-card-meta">
                     <time dateTime={log.at}>{t('Hari ini')}</time>
                     {log.areas?.map(a => <span key={a} className="area-chip">{AREAS[a as keyof typeof AREAS]?.label[en ? 'en' : 'id']}</span>)}
