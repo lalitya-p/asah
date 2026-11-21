@@ -12,4 +12,5 @@
 - [x] Streamline onboarding order, persist the role once, show inline theory, and migrate saved progress
 - [x] Add varied Development activities, visible benefits, and accessible carousel navigation
 - [x] Move the activity carousel to Today and open Development with the garden
-- [ ] Complete one illustration per activity step and verify activity pages
+- [x] Complete one illustration per activity step and verify activity pages
+- [x] Add and verify the bilingual, silent garden growth story with Skip, Replay, and reduced-motion support

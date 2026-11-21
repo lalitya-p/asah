@@ -591,3 +591,10 @@ button,a,select,input { -webkit-tap-highlight-color: transparent; }
 @keyframes garden-grow{from{transform:scale(.4);opacity:.3}to{transform:scale(1);opacity:1}}
 @media(prefers-reduced-motion:reduce){.garden-grow>g{animation:none}}
 .dev-done .dev-garden{margin:6px 0;}
+:root{--garden-water:oklch(0.65 0.11 230);}
+.dev-garden>.garden-story-controls{padding:0 18px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;}
+.garden-story-caption{margin:0;min-height:40px;font-size:13px;font-weight:500;line-height:20px;color:var(--muted-foreground);overflow-wrap:anywhere;}
+.garden-story-button{min-height:44px;border-radius:999px;max-width:100%;white-space:normal;text-align:left;}
+.garden-grow>.garden-water{pointer-events:none;animation:garden-watering .65s ease-in both;}
+@keyframes garden-watering{from{opacity:0;translate:0 -12px;}20%{opacity:1;}to{opacity:0;translate:0 90px;}}
+@media(prefers-reduced-motion:reduce){.garden-grow>.garden-water{display:none;animation:none;}}

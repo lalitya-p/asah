@@ -1,13 +1,13 @@
 import type { AreaId } from '@/data/asahActivities';
 import { plantStage } from '@/lib/moments';
 
-type Props = { counts: Record<AreaId, number>; highlight?: AreaId[]; labels: Record<AreaId, string>; onSelect?: (area: AreaId) => void };
+type Props = { counts: Record<AreaId, number>; highlight?: AreaId[]; wateringKey?: string; labels: Record<AreaId, string>; onSelect?: (area: AreaId) => void };
 
 const ORDER: AreaId[] = ['moving', 'talking', 'others', 'hands'];
 const X: Record<AreaId, number> = { moving: 50, talking: 130, others: 210, hands: 290 };
 
 /** Layered SVG garden: one plant per development area, grown by logged moments. */
-export function GardenCanvas({ counts, highlight = [], labels, onSelect }: Props) {
+export function GardenCanvas({ counts, highlight = [], wateringKey = '', labels, onSelect }: Props) {
   return (
     <svg className="garden-canvas" viewBox="0 0 340 200" role="img" aria-label={ORDER.map(a => `${labels[a]}: ${counts[a]}`).join(', ')}>
       <rect width="340" height="200" fill="var(--garden-sky)" />
@@ -21,6 +21,9 @@ export function GardenCanvas({ counts, highlight = [], labels, onSelect }: Props
             <ellipse cx="0" cy="4" rx="22" ry="6" fill="var(--garden-mound)" />
             {stage === 0 ? <><ellipse cx="-5" cy="0" rx="3" ry="2" fill="var(--garden-seed)" /><ellipse cx="5" cy="1" rx="3" ry="2" fill="var(--garden-seed)" /></> : <Plant area={area} stage={stage} />}
             <text y="28" textAnchor="middle" className="garden-label">{labels[area]}</text>
+            {grow && <g key={wateringKey} className="garden-water" aria-hidden="true">
+              {[-10, 0, 10].map(x => <path key={x} d="M0 -7 Q-5 0 0 3 Q5 0 0 -7Z" transform={`translate(${x} -105)`} fill="var(--garden-water)" />)}
+            </g>}
           </g>
         );
       })}

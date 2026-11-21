@@ -2,9 +2,9 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useLanguage } from '@/components/asah/language';
 import { useAsah } from '@/components/asah/store';
 import { AreaIcon } from '@/components/asah/area-icon';
-import { AREAS, NOTICE_OPTIONS, getActivity, type AreaId } from '@/data/asahActivities';
+import { AREAS, NOTICE_OPTIONS, getActivity } from '@/data/asahActivities';
 import { ageGroupLabel, areaIds, childMoments, momentsInArea } from '@/lib/moments';
-import { GardenCanvas } from '@/components/asah/GardenCanvas';
+import { GardenStory } from '@/components/asah/GardenStory';
 import { ageMonths } from '@/lib/asah';
 import { pageHead } from '@/lib/page-head';
 
@@ -31,7 +31,7 @@ function Development() {
   const inRange = months >= 0 && months < 72;
   return <div className="dev-page">
     <header className="dev-head"><h1>{name}{inRange && <> · {ageGroupLabel(months, lang)}</>}</h1><p>{copy.tagline[lang]}</p></header>
-    <section className="dev-garden"><h2 className="dev-garden-title">{copy.gardenTitle[lang]}</h2><p className="dev-garden-intro">{copy.gardenDesc[lang]}</p><GardenCanvas counts={Object.fromEntries(areaIds.map(a => [a, momentsInArea(moments, a).length])) as Record<AreaId, number>} labels={Object.fromEntries(areaIds.map(a => [a, AREAS[a].label[lang]])) as Record<AreaId, string>} onSelect={a => document.getElementById(`area-${a}`)?.scrollIntoView({ behavior: 'smooth', block: 'center' })} /><div className="dev-garden-count">{moments.length === 0 ? copy.gardenEmpty[lang] : lang === 'en' ? `${moments.length} ${moments.length === 1 ? 'activity' : 'activities'} done` : `${moments.length} aktivitas selesai`}</div></section>
+    <section className="dev-garden"><h2 className="dev-garden-title">{copy.gardenTitle[lang]}</h2><p className="dev-garden-intro">{copy.gardenDesc[lang]}</p><GardenStory key={child?.id} moments={moments} /><div className="dev-garden-count">{moments.length === 0 ? copy.gardenEmpty[lang] : lang === 'en' ? `${moments.length} ${moments.length === 1 ? 'activity' : 'activities'} done` : `${moments.length} aktivitas selesai`}</div></section>
     <section className="dev-areas"><h2>{copy.noticed[lang]}</h2>
       {areaIds.map(id => {
         const inArea = momentsInArea(moments, id);
