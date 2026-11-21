@@ -42,3 +42,5 @@ use the editor.
 - Keep family-space records (active session, onboarding step and draft, children, role, inventory) in the shared account store so progress survives refresh, sign out, and reopening the browser; sign out must hide data from the UI without erasing it, and erasing must remove the space itself.
 - Attach generated step illustrations by canonical activity ID and one-based step number so both languages share the same instructional pictures.
 - Replay garden growth from chronologically sorted Completion records in a read-only browser timeline; reuse the live plant-stage logic so playback never changes family data or growth thresholds.
+
+- Layout is mobile-only everywhere: wide screens show the phone layout inside a centered ~430px frame; no separate desktop layout.
