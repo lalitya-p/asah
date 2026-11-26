@@ -44,3 +44,4 @@ use the editor.
 - Replay garden growth from chronologically sorted Completion records in a read-only browser timeline; reuse the live plant-stage logic so playback never changes family data or growth thresholds.
 
 - Layout is mobile-only everywhere: wide screens show the phone layout inside a centered ~430px frame; no separate desktop layout.
+- Inside the fixed-height phone frame, both app and public-screen shells must own vertical scrolling with a zero minimum height so onboarding remains reachable without moving the bottom navigation.
